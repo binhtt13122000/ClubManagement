@@ -77,7 +77,7 @@
     &nbsp;
     <c:set var="user" value="${sessionScope.user}"/>
     <c:if test="${not empty user.avatar}">
-        <img src="<c:url value="${user.avatar}"/>" width="36" height="36" class="d-inline-block align-top rounded-circle" alt="img">
+        <img src="images/${user.avatar}" width="36" height="36" class="d-inline-block align-top rounded-circle" alt="img">
     </c:if>
     <c:if test="${empty user.avatar}">
         <img src="./images/anonymous_avatar.jpg" width="36" height="36" class="d-inline-block align-top rounded-circle" alt="Anonymous">

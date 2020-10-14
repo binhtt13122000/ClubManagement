@@ -11,17 +11,13 @@ import java.io.File;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -69,6 +65,7 @@ public class EditProfileController extends HttpServlet {
             String fullname = "";
             String avtUrl = "";
             boolean getNoti = false;
+            String avtTmp = "";
             try {
                 List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
                 for (FileItem item : items) {
@@ -94,6 +91,9 @@ public class EditProfileController extends HttpServlet {
                                 break;
                             case "avtUrl":
                                 avtUrl = fieldValue;
+                                break;
+                            case "avtStr":
+                                avtTmp = fieldValue;
                                 break;
                         }
                     } else {
@@ -121,7 +121,11 @@ public class EditProfileController extends HttpServlet {
                 user.setPassword(password);
                 user.setStudentID(studentID);
                 user.setPhone(phone);
-                user.setAvatar(avtUrl);
+                if (avtUrl == null || avtUrl.trim().equals("")) {
+                    user.setAvatar(avtTmp);
+                } else {
+                    user.setAvatar(avtUrl);
+                }
                 user.setGetNotification(getNoti);
                 user.setEmail(email);
                 UserBLO blo = new UserBLO();

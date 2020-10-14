@@ -30,6 +30,7 @@
                 <label for="file">Avatar</label>
                 <input name="avtUrl" type="file" value="${user.avatar}" class="form-control-file" id="file">
             </div>
+            <input type="hidden" name="avtStr" value="${user.avatar}" />
             <div class="form-group">
                 <label for="studentID">Student ID</label>
                 <input readonly type="text" class="form-control" name="studentIDTxt" value="${user.studentID}" id="studentID" aria-describedby="studentID">
@@ -64,8 +65,30 @@
     </main>
         </div>
     </div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>            
 <script>
-    console.log(${user.getNotification})
+    $(document).ready(function() {
+        $('#update-form').submit(function(e){
+            e.preventDefault();
+            let count = 0;
+            if($('#fullname').val().length === 0){
+                count++;
+            } else {
+                
+            }
+            
+            if($('#phone').val().length === 0){
+                count++;
+            } else {
+                
+            }
+            if(count > 0){
+                e.preventDefault();
+            }
+        })
+    });
 </script>
 </body>
 </html>

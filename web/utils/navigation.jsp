@@ -5,6 +5,7 @@
   Time: 7:03 AM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -62,7 +63,8 @@
         <div class="col-md-3 col-xl-3 bd-sidebar">
             <button style="margin: 12px" class="btn bd-search-docs-toggle d-md-none p-0 ml-3" type="button" data-toggle="collapse" data-target="#bd-docs-nav" aria-controls="bd-docs-nav" aria-expanded="false" aria-label="Toggle docs navigation"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" role="img" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/></svg></button>
             <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Main navigation">
-                <div class="bd-toc-item item active" id="intro">
+                <c:if test="${sessionScope.user == null}" var="checkRole">
+                    <div class="bd-toc-item item active" id="intro">
                     <a class="bd-toc-link item" href="#">
                         F-Code Introduction
                     </a>
@@ -93,6 +95,38 @@
                         </li>
                     </ul>
                 </div>
+                </c:if>
+                <c:if test="${!checkRole}">
+                    <c:if test="${sessionScope.user.roleId.id == 1}" var="checkAdmin">
+                        <div class="bd-toc-item item active" id="intro">
+                            <a class="bd-toc-link item" href="#">
+                                User Manage
+                            </a>
+                        </div>
+                        <div class="bd-toc-item item" >
+                            <a class="bd-toc-link " href="#">
+                                Event Manage
+                            </a>
+                        </div>
+                        <div class="bd-toc-item item" >
+                            <a class="bd-toc-link" href="#">
+                                Group Manage
+                            </a>
+                        </div>
+                    </c:if>
+                    <c:if test="${!checkAdmin}">
+                        <div class="bd-toc-item item active" >
+                            <a class="bd-toc-link " href="#">
+                                Event Manage
+                            </a>
+                        </div>
+                        <div class="bd-toc-item item" >
+                            <a class="bd-toc-link" href="#">
+                                Group Manage
+                            </a>
+                        </div>
+                    </c:if>
+                </c:if>
             </nav>
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
