@@ -5,29 +5,22 @@
  */
 package binhtt.controllers;
 
-import binhtt.blos.AuthenticationBLO;
+import binhtt.blos.UserBLO;
 import binhtt.entities.TblUser;
-import binhtt.utils.RoleConstant;
-import binhtt.utils.accessgoogle.common.GooglePojo;
-import binhtt.utils.accessgoogle.common.GoogleUtils;
+
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author binht
  */
-public class LoginGoogleController extends HttpServlet {
-
-    private static final String ERROR = "index.jsp";
-    private static final String ADMIN = "MainController?btnAction=SearchAccount&searchTxt=";
-    private static final String LEADER = "leader.jsp";
-    private static final String MEMBER = "member.jsp";
-
+public class SearchAccountController extends HttpServlet {
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,42 +33,20 @@ public class LoginGoogleController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
         try {
-            String code = request.getParameter("code");
-            if (code == null || code.isEmpty()) {
-                request.setAttribute("ERROR", "An lol roi");
+            String search = request.getParameter("searchTxt");
+            UserBLO blo = new UserBLO();
+            List<TblUser> users;
+            if(search == null){
+                users = blo.getAllUsers();
             } else {
-                String accessToken = GoogleUtils.getToken(code);
-                GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
-                AuthenticationBLO blo = new AuthenticationBLO();
-                TblUser user = blo.checkLoginByGoogle(googlePojo.getEmail());
-                if (user.getStatus() == false) {
-                request.setAttribute("ERROR", "This account is block!");
-            } else {
-                int role = user.getRoleId().getId();
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                switch (role) {
-                    case RoleConstant.ADMIN:
-                        url = ADMIN;
-                        break;
-                    case RoleConstant.LEADER:
-                        url = LEADER;
-                        break;
-                    case RoleConstant.MEMBER:
-                        url = MEMBER;
-                        break;
-                    default:
-                        request.setAttribute("ERROR", "Invalid Username or Password");
-                        break;
-                }
+                users = blo.getUserByFullName(search);
             }
-            }
-        } catch (Exception e) {
-            log("Exception at gg login :" + e.getMessage());
+            request.setAttribute("LIST_DTO", users);
+        } catch (Exception e){
+            log("Error at Search Account Controller: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            request.getRequestDispatcher("admin.jsp").forward(request, response);
         }
     }
 

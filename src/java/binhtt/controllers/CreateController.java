@@ -5,29 +5,25 @@
  */
 package binhtt.controllers;
 
-import binhtt.blos.AuthenticationBLO;
+import binhtt.blos.UserBLO;
+import binhtt.entities.TblRole;
 import binhtt.entities.TblUser;
 import binhtt.utils.RoleConstant;
-import binhtt.utils.accessgoogle.common.GooglePojo;
-import binhtt.utils.accessgoogle.common.GoogleUtils;
+
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author binht
  */
-public class LoginGoogleController extends HttpServlet {
-
-    private static final String ERROR = "index.jsp";
-    private static final String ADMIN = "MainController?btnAction=SearchAccount&searchTxt=";
-    private static final String LEADER = "leader.jsp";
-    private static final String MEMBER = "member.jsp";
-
+public class CreateController extends HttpServlet {
+    private final static String INVALID = "utils/error.jsp";
+    private final static String SUCCESS = "admin.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,40 +36,30 @@ public class LoginGoogleController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
+        String url = INVALID;
         try {
-            String code = request.getParameter("code");
-            if (code == null || code.isEmpty()) {
-                request.setAttribute("ERROR", "An lol roi");
+            String studentID = request.getParameter("studentIDTxt");
+            String fullname = request.getParameter("fullnameTxt");
+            String phone = request.getParameter("phoneTxt");
+            String email = request.getParameter("emailTxt");
+            TblUser user = new TblUser();
+            user.setStudentID(studentID);
+            user.setEmail(email);
+            user.setPhone(phone);
+            user.setFullname(fullname);
+            user.setGetNotification(false);
+            user.setRoleId(new TblRole(RoleConstant.MEMBER, "MEMBER"));
+            user.setPassword(studentID);
+            user.setStatus(true);
+            UserBLO blo = new UserBLO();
+            boolean check = blo.create(user);
+            if(check){
+                url = SUCCESS;
             } else {
-                String accessToken = GoogleUtils.getToken(code);
-                GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
-                AuthenticationBLO blo = new AuthenticationBLO();
-                TblUser user = blo.checkLoginByGoogle(googlePojo.getEmail());
-                if (user.getStatus() == false) {
-                request.setAttribute("ERROR", "This account is block!");
-            } else {
-                int role = user.getRoleId().getId();
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                switch (role) {
-                    case RoleConstant.ADMIN:
-                        url = ADMIN;
-                        break;
-                    case RoleConstant.LEADER:
-                        url = LEADER;
-                        break;
-                    case RoleConstant.MEMBER:
-                        url = MEMBER;
-                        break;
-                    default:
-                        request.setAttribute("ERROR", "Invalid Username or Password");
-                        break;
-                }
+                request.setAttribute("ERROR", "Duplicate information!!!");
             }
-            }
-        } catch (Exception e) {
-            log("Exception at gg login :" + e.getMessage());
+        } catch (Exception e){
+            log("Exception at CreateController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

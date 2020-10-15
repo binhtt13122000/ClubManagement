@@ -1,5 +1,6 @@
 package binhtt.blos;
 
+import binhtt.entities.TblRole;
 import binhtt.entities.TblUser;
 
 import java.io.Serializable;
@@ -30,8 +31,20 @@ public class UserBLO implements Serializable {
         EntityManager em = emf.createEntityManager();
         List<TblUser> users = null;
         try {
-            String jpql = "TblUser.findAll";
-            Query query = em.createNamedQuery(jpql);
+            Query query = em.createNamedQuery("TblUser.findAll", TblUser.class);
+            users = query.getResultList();
+        } finally {
+            em.close();
+        }
+        return users;
+    }
+
+    public List<TblUser> getUserByFullName(String search) throws Exception{
+        EntityManager em = emf.createEntityManager();
+        List<TblUser> users;
+        try {
+            Query query = em.createNamedQuery("TblUser.findByLikeFullname", TblUser.class);
+            query.setParameter("fullname", "%" + search + "%");
             users = query.getResultList();
         } finally {
             em.close();
@@ -52,6 +65,59 @@ public class UserBLO implements Serializable {
                 currentUser.setPassword(user.getPassword());
                 em.getTransaction().begin();
                 em.merge(currentUser);
+                em.getTransaction().commit();
+                valid = true;
+            }
+        } finally {
+            em.close();
+        }
+        return valid;
+    }
+
+    public boolean changeStatus(String studentID) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        boolean valid = false;
+        try {
+            TblUser user = em.find(TblUser.class, studentID);
+            if(user != null){
+                user.setStatus(!user.getStatus());
+                em.getTransaction().begin();
+                em.merge(user);
+                em.getTransaction().commit();
+                valid = true;
+            }
+        } finally {
+            em.close();
+        }
+        return valid;
+    }
+
+    public boolean changeRole(String studentID, int newRole) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        boolean valid = false;
+        try {
+            TblUser user = em.find(TblUser.class, studentID);
+            if(user != null){
+                TblRole role = new TblRole(newRole);
+                user.setRoleId(role);
+                em.getTransaction().begin();
+                em.merge(user);
+                em.getTransaction().commit();
+                valid = true;
+            }
+        } finally {
+            em.close();
+        }
+        return valid;
+    }
+    public boolean create(TblUser user) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        boolean valid = false;
+        try {
+            TblUser currentUser = em.find(TblUser.class, user.getStudentID());
+            if(currentUser == null){
+                em.getTransaction().begin();
+                em.persist(user);
                 em.getTransaction().commit();
                 valid = true;
             }

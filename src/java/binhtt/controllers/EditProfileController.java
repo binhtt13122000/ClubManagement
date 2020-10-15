@@ -58,8 +58,9 @@ public class EditProfileController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+            HttpSession session = request.getSession();
             String studentID = "";
-            String password = "";
+            String password = null;
             String email = "";
             String phone = "";
             String fullname = "";
@@ -78,7 +79,12 @@ public class EditProfileController extends HttpServlet {
                                 studentID = fieldValue;
                                 break;
                             case "passwordTxt":
-                                password = fieldValue;
+                                System.out.println(fieldValue.trim().length());
+                                if (fieldValue.trim().length() > 0) {
+                                    password = fieldValue;
+                                } else {
+                                    password = ((TblUser) session.getAttribute("user")).getPassword();
+                                }
                                 break;
                             case "emailTxt":
                                 email = fieldValue;
@@ -94,6 +100,9 @@ public class EditProfileController extends HttpServlet {
                                 break;
                             case "avtStr":
                                 avtTmp = fieldValue;
+                                break;
+                            case "notiCkb":
+                                getNoti = (fieldValue != null);
                                 break;
                         }
                     } else {
@@ -118,6 +127,7 @@ public class EditProfileController extends HttpServlet {
                 }
                 TblUser user = new TblUser();
                 user.setFullname(fullname);
+                System.out.println(password);
                 user.setPassword(password);
                 user.setStudentID(studentID);
                 user.setPhone(phone);
@@ -132,7 +142,6 @@ public class EditProfileController extends HttpServlet {
                 boolean check = blo.updateProfile(user, studentID);
                 if (check) {
                     url = SUCCESS;
-                    HttpSession session = request.getSession();
                     TblUser authenticatedUser = (TblUser) session.getAttribute("user");
                     if (authenticatedUser != null) {
                         session.setAttribute("user", user);

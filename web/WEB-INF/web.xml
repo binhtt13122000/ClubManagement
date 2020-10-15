@@ -16,6 +16,22 @@
         <servlet-name>EditProfileController</servlet-name>
         <servlet-class>binhtt.controllers.EditProfileController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreateController</servlet-name>
+        <servlet-class>binhtt.controllers.CreateController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchAccountController</servlet-name>
+        <servlet-class>binhtt.controllers.SearchAccountController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangeStatusController</servlet-name>
+        <servlet-class>binhtt.controllers.ChangeStatusController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangeRoleServlet</servlet-name>
+        <servlet-class>binhtt.controllers.ChangeRoleServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -31,6 +47,22 @@
     <servlet-mapping>
         <servlet-name>EditProfileController</servlet-name>
         <url-pattern>/EditProfileController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateController</servlet-name>
+        <url-pattern>/CreateController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchAccountController</servlet-name>
+        <url-pattern>/SearchAccountController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeStatusController</servlet-name>
+        <url-pattern>/ChangeStatusController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeRoleServlet</servlet-name>
+        <url-pattern>/ChangeRoleServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -22,6 +22,11 @@ public class MainController extends HttpServlet {
     private static final String GGLOGIN = "LoginGoogleController";
     private static final String LOGOUT = "LogoutController";
     private static final String EDIT_PROFILE = "EditProfileController";
+    private static final String CREATE = "CreateController";
+    private static final String SEARCH_ACCOUNT = "SearchAccountController";
+    private static final String CHANGE_STATUS = "ChangeStatusController";
+    private static final String CHANGE_ROLE = "ChangeRoleServlet";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -50,8 +55,20 @@ public class MainController extends HttpServlet {
                 case "EditProfile":
                     url = EDIT_PROFILE;
                     break;
+                case "Create":
+                    url = CREATE;
+                    break;
+                case "SearchAccount":
+                    url = SEARCH_ACCOUNT;
+                    break;
+                case "ChangeStatus":
+                    url = CHANGE_STATUS;
+                    break;
+                case "ChangeRole":
+                    url = CHANGE_ROLE;
+                    break;
                 default:
-                    request.setAttribute("ERRROR", "Action is invalid");
+                    request.setAttribute("ERROR", "Action is invalid");
                     break;
             }
         } catch (Exception e) {

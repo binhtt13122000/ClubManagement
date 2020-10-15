@@ -40,7 +40,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TblUser.findByPhone", query = "SELECT t FROM TblUser t WHERE t.phone = :phone")
     , @NamedQuery(name = "TblUser.findByAvatar", query = "SELECT t FROM TblUser t WHERE t.avatar = :avatar")
     , @NamedQuery(name = "TblUser.findByGetNotification", query = "SELECT t FROM TblUser t WHERE t.getNotification = :getNotification")
-    , @NamedQuery(name = "TblUser.findByStatus", query = "SELECT t FROM TblUser t WHERE t.status = :status")})
+    , @NamedQuery(name = "TblUser.findByStatus", query = "SELECT t FROM TblUser t WHERE t.status = :status")
+    , @NamedQuery(name = "TblUser.findByLikeFullname", query = "SELECT t FROM TblUser t WHERE t.fullname LIKE :fullname")})
 public class TblUser implements Serializable {
 
     private static final long serialVersionUID = 1L;

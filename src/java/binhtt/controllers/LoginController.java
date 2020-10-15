@@ -6,10 +6,14 @@
 package binhtt.controllers;
 
 import binhtt.blos.AuthenticationBLO;
+import binhtt.blos.UserBLO;
 import binhtt.entities.TblUser;
 import binhtt.utils.RoleConstant;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +28,7 @@ import javax.servlet.http.HttpSession;
 public class LoginController extends HttpServlet {
 
     private static final String ERROR_PAGE = "index.jsp";
-    private static final String ADMIN = "admin.jsp";
+    private static final String ADMIN = "MainController?btnAction=SearchAccount&searchTxt=";
     private static final String LEADER = "leader.jsp";
     private static final String MEMBER = "member.jsp";
 
@@ -41,6 +45,8 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR_PAGE;
+        UserBLO userBlo;
+        List<TblUser> users;
         try {
             String studentID = request.getParameter("txtStudentID");
             String password = request.getParameter("txtPassword");
@@ -70,6 +76,8 @@ public class LoginController extends HttpServlet {
         } catch (NoResultException e) {
             request.setAttribute("ERROR", "Invalid Username or Password");
             log("Error in LoginController: " + e.getMessage());
+        } catch (Exception ex) {
+            log("Error in LoginController: " + ex.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
