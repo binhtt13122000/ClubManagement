@@ -88,6 +88,9 @@ public class MainController extends HttpServlet {
                 case "ViewEvent":
                     url = VIEW_EVENT;
                     break;
+                case "UpdateEvent":
+                    url = UPDATE_EVENT;
+                    break;
                 default:
                     request.setAttribute("ERROR", "Action is invalid");
                     break;

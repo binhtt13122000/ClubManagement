@@ -55,10 +55,10 @@
                                     <td>${dto.total}</td>
                                     <td>${dto.numRegister}</td>
                                     <td>${dto.numOfAttendees}</td>
-                                    <td>${dto.eventStatus}</td>
+                                    <td><span class="badge badge-${dto.eventStatus.equals('DELETED') ? "danger":"primary"}">${dto.eventStatus}</span></td>
                                     <td>
-                                        <a href="MainController?btnAction=ViewEvent&id=${dto.eventID}" target="_blank" class="btn btn-secondary btn-sm">View</a>
-                                        <button type="button" onclick="window.location.href='MainController?btnAction=UpdateEvent'" class="btn btn-secondary btn-sm">Update</button>
+                                        <a href="MainController?btnAction=ViewEvent&id=${dto.eventID}" target="_blank" class="btn btn-primary btn-sm">View</a>
+                                        <a href="MainController?btnAction=UpdateEvent&id=${dto.eventID}&searchEventTxt=${param.searchEventTxt}" class="btn btn-danger btn-sm">Delete</a>
                                         <button type="button" onclick="window.location.href='MainController?btnAction=CheckAttendance'" class="btn btn-secondary btn-sm">Check Attendance</button>
                                     </td>
                             </tr>

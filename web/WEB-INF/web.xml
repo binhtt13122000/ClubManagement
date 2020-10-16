@@ -52,6 +52,10 @@
         <servlet-name>ViewEventController</servlet-name>
         <servlet-class>binhtt.controllers.ViewEventController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UpdateEventController</servlet-name>
+        <servlet-class>binhtt.controllers.UpdateEventController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -103,6 +107,10 @@
     <servlet-mapping>
         <servlet-name>ViewEventController</servlet-name>
         <url-pattern>/ViewEventController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateEventController</servlet-name>
+        <url-pattern>/UpdateEventController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
