@@ -32,6 +32,26 @@
         <servlet-name>ChangeRoleServlet</servlet-name>
         <servlet-class>binhtt.controllers.ChangeRoleServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchGroupController</servlet-name>
+        <servlet-class>binhtt.controllers.SearchGroupController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewGroupDetailController</servlet-name>
+        <servlet-class>binhtt.controllers.ViewGroupDetailController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchEventController</servlet-name>
+        <servlet-class>binhtt.controllers.SearchEventController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateEventController</servlet-name>
+        <servlet-class>binhtt.controllers.CreateEventController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewEventController</servlet-name>
+        <servlet-class>binhtt.controllers.ViewEventController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -63,6 +83,26 @@
     <servlet-mapping>
         <servlet-name>ChangeRoleServlet</servlet-name>
         <url-pattern>/ChangeRoleServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchGroupController</servlet-name>
+        <url-pattern>/SearchGroupController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewGroupDetailController</servlet-name>
+        <url-pattern>/ViewGroupDetailController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchEventController</servlet-name>
+        <url-pattern>/SearchEventController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateEventController</servlet-name>
+        <url-pattern>/CreateEventController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewEventController</servlet-name>
+        <url-pattern>/ViewEventController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

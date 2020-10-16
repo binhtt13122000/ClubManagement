@@ -111,9 +111,6 @@
            } else {
                $('#confirmErr').removeClass("text-danger");
            }
-           if(count > 0){
-               e.preventDefault();
-           }
            if(password.val().length > 0) {
                if(password.val().length < 6 || password.val().length > 20){
                    count++;
@@ -122,6 +119,9 @@
                } else {
                    $('#passErr').removeClass("text-danger");
                }
+           }
+           if(count > 0) {
+               e.preventDefault();
            }
        })
     });

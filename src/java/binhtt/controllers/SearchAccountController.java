@@ -37,7 +37,7 @@ public class SearchAccountController extends HttpServlet {
             String search = request.getParameter("searchTxt");
             UserBLO blo = new UserBLO();
             List<TblUser> users;
-            if(search == null){
+            if(search.isEmpty()){
                 users = blo.getAllUsers();
             } else {
                 users = blo.getUserByFullName(search);

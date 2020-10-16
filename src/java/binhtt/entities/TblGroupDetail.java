@@ -32,7 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "TblGroupDetail.findById", query = "SELECT t FROM TblGroupDetail t WHERE t.id = :id")
     , @NamedQuery(name = "TblGroupDetail.findByStatus", query = "SELECT t FROM TblGroupDetail t WHERE t.status = :status")
     , @NamedQuery(name = "TblGroupDetail.findByAddTime", query = "SELECT t FROM TblGroupDetail t WHERE t.addTime = :addTime")
-    , @NamedQuery(name = "TblGroupDetail.findByRemoveTime", query = "SELECT t FROM TblGroupDetail t WHERE t.removeTime = :removeTime")})
+    , @NamedQuery(name = "TblGroupDetail.findByRemoveTime", query = "SELECT t FROM TblGroupDetail t WHERE t.removeTime = :removeTime")
+    , @NamedQuery(name = "TblGroupDetail.findByFullname", query = "SELECT t FROM TblGroupDetail t WHERE t.fullname = :fullname")
+    , @NamedQuery(name = "TblGroupDetail.findByEmail", query = "SELECT t FROM TblGroupDetail t WHERE t.email = :email")})
 public class TblGroupDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,6 +52,11 @@ public class TblGroupDetail implements Serializable {
     @Column(name = "removeTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date removeTime;
+    @Column(name = "fullname", length = 30)
+    private String fullname;
+    @Basic(optional = false)
+    @Column(name = "email", nullable = false, length = 40)
+    private String email;
     @JoinColumn(name = "groupID", referencedColumnName = "groupID", nullable = false)
     @ManyToOne(optional = false)
     private TblGroup groupID;
@@ -64,10 +71,11 @@ public class TblGroupDetail implements Serializable {
         this.id = id;
     }
 
-    public TblGroupDetail(String id, String status, Date addTime) {
+    public TblGroupDetail(String id, String status, Date addTime, String email) {
         this.id = id;
         this.status = status;
         this.addTime = addTime;
+        this.email = email;
     }
 
     public String getId() {
@@ -100,6 +108,22 @@ public class TblGroupDetail implements Serializable {
 
     public void setRemoveTime(Date removeTime) {
         this.removeTime = removeTime;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public TblGroup getGroupID() {

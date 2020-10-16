@@ -33,7 +33,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TblGroup.findByGroupID", query = "SELECT t FROM TblGroup t WHERE t.groupID = :groupID")
     , @NamedQuery(name = "TblGroup.findByGroupName", query = "SELECT t FROM TblGroup t WHERE t.groupName = :groupName")
     , @NamedQuery(name = "TblGroup.findByGroupDesc", query = "SELECT t FROM TblGroup t WHERE t.groupDesc = :groupDesc")
-    , @NamedQuery(name = "TblGroup.findByTotalMember", query = "SELECT t FROM TblGroup t WHERE t.totalMember = :totalMember")})
+    , @NamedQuery(name = "TblGroup.findByTotalMember", query = "SELECT t FROM TblGroup t WHERE t.totalMember = :totalMember")
+    , @NamedQuery(name = "TblGroup.findByStatus", query = "SELECT t FROM TblGroup t WHERE t.status = :status")})
 public class TblGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,6 +50,9 @@ public class TblGroup implements Serializable {
     @Basic(optional = false)
     @Column(name = "totalMember", nullable = false)
     private int totalMember;
+    @Basic(optional = false)
+    @Column(name = "status", nullable = false, length = 10)
+    private String status;
     @JoinColumn(name = "leaderId", referencedColumnName = "studentID", nullable = false)
     @ManyToOne(optional = false)
     private TblUser leaderId;
@@ -62,10 +66,11 @@ public class TblGroup implements Serializable {
         this.groupID = groupID;
     }
 
-    public TblGroup(String groupID, String groupName, int totalMember) {
+    public TblGroup(String groupID, String groupName, int totalMember, String status) {
         this.groupID = groupID;
         this.groupName = groupName;
         this.totalMember = totalMember;
+        this.status = status;
     }
 
     public String getGroupID() {
@@ -98,6 +103,14 @@ public class TblGroup implements Serializable {
 
     public void setTotalMember(int totalMember) {
         this.totalMember = totalMember;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public TblUser getLeaderId() {

@@ -99,18 +99,18 @@
                 <c:if test="${!checkRole}">
                     <c:if test="${sessionScope.user.roleId.id == 1}" var="checkAdmin">
                         <div class="bd-toc-item item active" id="intro">
-                            <a class="bd-toc-link item" href="#">
+                            <a class="bd-toc-link item" href="MainController?btnAction=SearchAccount&searchTxt=">
                                 User Manage
                             </a>
                         </div>
                         <div class="bd-toc-item item" >
-                            <a class="bd-toc-link " href="#">
-                                Event Manage
+                            <a class="bd-toc-link " href="MainController?btnAction=SearchGroup&searchGrTxt=">
+                                Group Manage
                             </a>
                         </div>
                         <div class="bd-toc-item item" >
-                            <a class="bd-toc-link" href="#">
-                                Group Manage
+                            <a class="bd-toc-link" href="MainController?btnAction=SearchEvent&searchEventTxt=">
+                                Event Manage
                             </a>
                         </div>
                     </c:if>

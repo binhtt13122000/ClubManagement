@@ -26,7 +26,13 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_ACCOUNT = "SearchAccountController";
     private static final String CHANGE_STATUS = "ChangeStatusController";
     private static final String CHANGE_ROLE = "ChangeRoleServlet";
-
+    private static final String SEARCH_GROUP = "SearchGroupController";
+    private static final String VIEW_GROUP_DETAIL = "ViewGroupDetailController";
+    private static final String SEARCH_EVENT = "SearchEventController";
+    private static final String CREATE_EVENT = "CreateEventController";
+    private static final String VIEW_EVENT = "ViewEventController";
+    private static final String UPDATE_EVENT = "UpdateEventController";
+    private static final String CHECK_ATTENDANCE = "CheckAttendanceController";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -66,6 +72,21 @@ public class MainController extends HttpServlet {
                     break;
                 case "ChangeRole":
                     url = CHANGE_ROLE;
+                    break;
+                case "SearchGroup":
+                        url = SEARCH_GROUP;
+                        break;
+                case "ViewGroupDetail":
+                    url = VIEW_GROUP_DETAIL;
+                    break;
+                case "SearchEvent":
+                    url = SEARCH_EVENT;
+                    break;
+                case "CreateEvent":
+                    url = CREATE_EVENT;
+                    break;
+                case "ViewEvent":
+                    url = VIEW_EVENT;
                     break;
                 default:
                     request.setAttribute("ERROR", "Action is invalid");

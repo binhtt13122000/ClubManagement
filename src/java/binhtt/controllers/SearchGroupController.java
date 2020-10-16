@@ -5,10 +5,8 @@
  */
 package binhtt.controllers;
 
-import binhtt.blos.UserBLO;
-import binhtt.entities.TblRole;
-import binhtt.entities.TblUser;
-import binhtt.utils.RoleConstant;
+import binhtt.blos.GroupBLO;
+import binhtt.entities.TblGroup;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,9 +20,9 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author binht
  */
-public class CreateController extends HttpServlet {
-    private final static String INVALID = "utils/error.jsp";
-    private final static String SUCCESS = "admin.jsp";
+public class SearchGroupController extends HttpServlet {
+    private static final String SUCCESS = "group_admin.jsp";
+    private static final String ERROR = "utils/error.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,32 +35,18 @@ public class CreateController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = INVALID;
+        String url = SUCCESS;
         try {
-            String studentID = request.getParameter("studentIDTxt");
-            String fullname = request.getParameter("fullnameTxt");
-            String phone = request.getParameter("phoneTxt");
-            String email = request.getParameter("emailTxt");
-            TblUser user = new TblUser();
-            user.setStudentID(studentID);
-            user.setEmail(email);
-            user.setPhone(phone);
-            user.setFullname(fullname);
-            user.setGetNotification(false);
-            user.setRoleId(new TblRole(RoleConstant.MEMBER, "MEMBER"));
-            user.setPassword(studentID);
-            user.setStatus(true);
-            UserBLO blo = new UserBLO();
-            boolean check = blo.create(user);
-            if(check){
-                List<TblUser> users = blo.getAllUsers();
-                request.setAttribute("LIST_DTO", users);
-                url = SUCCESS;
-            } else {
-                request.setAttribute("ERROR", "Duplicate information!!!");
+            String searchGrTxt = request.getParameter("searchGrTxt");
+            System.out.println(searchGrTxt.length());
+            if(searchGrTxt.isEmpty()){
+                GroupBLO blo = new GroupBLO();
+                List<TblGroup> groups = blo.getAllGroup();
+                request.setAttribute("LIST_GROUP", groups);
+//                System.out.println(groups.toArray().length);
             }
         } catch (Exception e){
-            log("Exception at CreateController: " + e.getMessage());
+            log("error at SearchGroupController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

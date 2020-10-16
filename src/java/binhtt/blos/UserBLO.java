@@ -31,7 +31,7 @@ public class UserBLO implements Serializable {
         EntityManager em = emf.createEntityManager();
         List<TblUser> users = null;
         try {
-            Query query = em.createNamedQuery("TblUser.findAll", TblUser.class);
+            Query query = em.createQuery("SELECT t FROM TblUser t WHERE t.roleId.id = 2 OR t.roleId.id = 3", TblUser.class);
             users = query.getResultList();
         } finally {
             em.close();
@@ -43,7 +43,7 @@ public class UserBLO implements Serializable {
         EntityManager em = emf.createEntityManager();
         List<TblUser> users;
         try {
-            Query query = em.createNamedQuery("TblUser.findByLikeFullname", TblUser.class);
+            Query query = em.createQuery("SELECT t FROM TblUser t WHERE t.fullname LIKE :fullname AND (t.roleId.id = 2 or t.roleId.id = 3)", TblUser.class);
             query.setParameter("fullname", "%" + search + "%");
             users = query.getResultList();
         } finally {
@@ -125,6 +125,19 @@ public class UserBLO implements Serializable {
             em.close();
         }
         return valid;
+    }
+
+    public List<TblUser> getAllUsersByRole(int id) throws Exception{
+        EntityManager em = emf.createEntityManager();
+        List<TblUser> users = null;
+        try {
+            TypedQuery<TblUser> query = em.createQuery("SELECT t FROM TblUser t WHERE t.roleId.id = :id", TblUser.class);
+            query.setParameter("id", id);
+            users = query.getResultList();
+        } finally {
+            em.close();
+        }
+        return users;
     }
 
 }

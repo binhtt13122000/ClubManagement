@@ -5,10 +5,9 @@
  */
 package binhtt.controllers;
 
-import binhtt.blos.UserBLO;
-import binhtt.entities.TblRole;
-import binhtt.entities.TblUser;
-import binhtt.utils.RoleConstant;
+import binhtt.blos.GroupBLO;
+import binhtt.entities.TblGroup;
+import binhtt.entities.TblGroupDetail;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,9 +21,9 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author binht
  */
-public class CreateController extends HttpServlet {
-    private final static String INVALID = "utils/error.jsp";
-    private final static String SUCCESS = "admin.jsp";
+public class ViewGroupDetailController extends HttpServlet {
+    private static final String SUCESS = "MainController?btnAction=SearchGroup&searchGrTxt=";
+    private static final String ERROR = "utils/error.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,32 +36,17 @@ public class CreateController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = INVALID;
+        String url = ERROR;
         try {
-            String studentID = request.getParameter("studentIDTxt");
-            String fullname = request.getParameter("fullnameTxt");
-            String phone = request.getParameter("phoneTxt");
-            String email = request.getParameter("emailTxt");
-            TblUser user = new TblUser();
-            user.setStudentID(studentID);
-            user.setEmail(email);
-            user.setPhone(phone);
-            user.setFullname(fullname);
-            user.setGetNotification(false);
-            user.setRoleId(new TblRole(RoleConstant.MEMBER, "MEMBER"));
-            user.setPassword(studentID);
-            user.setStatus(true);
-            UserBLO blo = new UserBLO();
-            boolean check = blo.create(user);
-            if(check){
-                List<TblUser> users = blo.getAllUsers();
-                request.setAttribute("LIST_DTO", users);
-                url = SUCCESS;
-            } else {
-                request.setAttribute("ERROR", "Duplicate information!!!");
-            }
+            String id = request.getParameter("id");
+            GroupBLO blo = new GroupBLO();
+            List<TblGroupDetail> groupDetails = blo.getGroupDetailByGroupId(id);
+            TblGroup group = groupDetails.get(0).getGroupID();
+            request.setAttribute("LIST_GROUP_MEMBER", groupDetails);
+            request.setAttribute("GROUP_DETAIL", group);
+            url = SUCESS;
         } catch (Exception e){
-            log("Exception at CreateController: " + e.getMessage());
+            log("Exception at ViewGroupDetailController" + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

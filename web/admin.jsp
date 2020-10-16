@@ -21,12 +21,13 @@
                     <button onclick="location.href='create.jsp'" type="button" class="btn btn-primary">Create new Account</button>
                     <form action="MainController?btnAction=SearchAccount" method="post">
                         <div class="form-group">
-                            <label for="search">Search</label>
-                            <input id="search" name="searchTxt" value="${param.searchTxt}" class="form-control" aria-describedby="search"/>
+                            <div class="mt-3"></div>
+                            <input required id="search" placeholder="Search Name" name="searchTxt" value="${param.searchTxt}" class="form-control" aria-describedby="search"/>
                         </div>
                         <button type="submit" class="btn btn-primary">Search</button>
                         <button type="button" onclick="window.location.href='MainController?btnAction=SearchAccount&searchTxt='" class="btn btn-secondary">Reset</button>
                     </form>
+                    <div class="mt-3"></div>
                     <jsp:include page="user_manage.jsp"></jsp:include>
                 </main>
             </div>

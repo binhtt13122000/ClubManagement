@@ -5,10 +5,8 @@
  */
 package binhtt.controllers;
 
-import binhtt.blos.UserBLO;
-import binhtt.entities.TblRole;
-import binhtt.entities.TblUser;
-import binhtt.utils.RoleConstant;
+import binhtt.blos.EventBLO;
+import binhtt.entities.TblEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,9 +20,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author binht
  */
-public class CreateController extends HttpServlet {
-    private final static String INVALID = "utils/error.jsp";
-    private final static String SUCCESS = "admin.jsp";
+public class SearchEventController extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,34 +34,20 @@ public class CreateController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = INVALID;
         try {
-            String studentID = request.getParameter("studentIDTxt");
-            String fullname = request.getParameter("fullnameTxt");
-            String phone = request.getParameter("phoneTxt");
-            String email = request.getParameter("emailTxt");
-            TblUser user = new TblUser();
-            user.setStudentID(studentID);
-            user.setEmail(email);
-            user.setPhone(phone);
-            user.setFullname(fullname);
-            user.setGetNotification(false);
-            user.setRoleId(new TblRole(RoleConstant.MEMBER, "MEMBER"));
-            user.setPassword(studentID);
-            user.setStatus(true);
-            UserBLO blo = new UserBLO();
-            boolean check = blo.create(user);
-            if(check){
-                List<TblUser> users = blo.getAllUsers();
-                request.setAttribute("LIST_DTO", users);
-                url = SUCCESS;
+            String search = request.getParameter("searchEventTxt");
+            EventBLO blo = new EventBLO();
+            List<TblEvent> events;
+            if(search.isEmpty()){
+                events = blo.getAll();
             } else {
-                request.setAttribute("ERROR", "Duplicate information!!!");
+                events = blo.getEventByName(search);
             }
+            request.setAttribute("LIST_EVENT", events);
         } catch (Exception e){
-            log("Exception at CreateController: " + e.getMessage());
+            log("Exception at SearchEventController: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            request.getRequestDispatcher("event_admin.jsp").forward(request, response);
         }
     }
 

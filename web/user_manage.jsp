@@ -13,7 +13,7 @@
 </head>
 <body>
         <c:set value="${requestScope.LIST_DTO}" var="listDto"/>
-        <c:if test="${listDto == null}" var="checkList">
+        <c:if test="${empty listDto}" var="checkList">
             <p class="text-danger">Nothing</p>
         </c:if>
         <c:if test="${!checkList}">
@@ -47,7 +47,6 @@
                                 <td>
                                     <c:set var="role" value="${dto.roleId.id}"/>
                                     <select name="roleTxt" class="custom-select custom-select-sm">
-                                        <option value="1" ${role == 1 ? "selected": ""}>ADMIN</option>
                                         <option value="2" ${role == 2 ? "selected": ""}>LEADER</option>
                                         <option value="3" ${role == 3 ? "selected": ""}>MEMBER</option>
                                     </select>

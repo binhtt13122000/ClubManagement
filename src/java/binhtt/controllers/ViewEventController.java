@@ -5,14 +5,11 @@
  */
 package binhtt.controllers;
 
-import binhtt.blos.UserBLO;
-import binhtt.entities.TblRole;
-import binhtt.entities.TblUser;
-import binhtt.utils.RoleConstant;
+import binhtt.blos.EventBLO;
+import binhtt.entities.TblEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,9 +19,9 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author binht
  */
-public class CreateController extends HttpServlet {
-    private final static String INVALID = "utils/error.jsp";
-    private final static String SUCCESS = "admin.jsp";
+public class ViewEventController extends HttpServlet {
+    private static final String ERROR = "utils/error.jsp";
+    private static final String SUCCESS = "view_event.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,32 +34,23 @@ public class CreateController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = INVALID;
+        String url = ERROR;
         try {
-            String studentID = request.getParameter("studentIDTxt");
-            String fullname = request.getParameter("fullnameTxt");
-            String phone = request.getParameter("phoneTxt");
-            String email = request.getParameter("emailTxt");
-            TblUser user = new TblUser();
-            user.setStudentID(studentID);
-            user.setEmail(email);
-            user.setPhone(phone);
-            user.setFullname(fullname);
-            user.setGetNotification(false);
-            user.setRoleId(new TblRole(RoleConstant.MEMBER, "MEMBER"));
-            user.setPassword(studentID);
-            user.setStatus(true);
-            UserBLO blo = new UserBLO();
-            boolean check = blo.create(user);
-            if(check){
-                List<TblUser> users = blo.getAllUsers();
-                request.setAttribute("LIST_DTO", users);
-                url = SUCCESS;
+            String id = request.getParameter("id");
+            if(id.isEmpty()){
+                request.setAttribute("ERROR", "ID is not a parameter!");
             } else {
-                request.setAttribute("ERROR", "Duplicate information!!!");
+                EventBLO blo = new EventBLO();
+                TblEvent event = blo.getOneEvent(id);
+                if(event == null){
+                    request.setAttribute("ERROR", "ID is not be contained in DB!");
+                } else {
+                    request.setAttribute("EVENT_DETAIL", event);
+                    url = SUCCESS;
+                }
             }
-        } catch (Exception e){
-            log("Exception at CreateController: " + e.getMessage());
+        } catch (Exception e) {
+            log("Exception at ViewEventController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
