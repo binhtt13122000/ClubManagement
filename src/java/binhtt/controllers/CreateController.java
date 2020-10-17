@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CreateController extends HttpServlet {
     private final static String INVALID = "utils/error.jsp";
-    private final static String SUCCESS = "admin.jsp";
+    private final static String SUCCESS = "home.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

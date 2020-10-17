@@ -56,6 +56,14 @@
         <servlet-name>UpdateEventController</servlet-name>
         <servlet-class>binhtt.controllers.UpdateEventController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DeleteGroupController</servlet-name>
+        <servlet-class>binhtt.controllers.DeleteGroupController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddMemberController</servlet-name>
+        <servlet-class>binhtt.controllers.AddMemberController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -111,6 +119,14 @@
     <servlet-mapping>
         <servlet-name>UpdateEventController</servlet-name>
         <url-pattern>/UpdateEventController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteGroupController</servlet-name>
+        <url-pattern>/DeleteGroupController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddMemberController</servlet-name>
+        <url-pattern>/AddMemberController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

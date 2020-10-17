@@ -33,6 +33,8 @@ public class MainController extends HttpServlet {
     private static final String VIEW_EVENT = "ViewEventController";
     private static final String UPDATE_EVENT = "UpdateEventController";
     private static final String CHECK_ATTENDANCE = "CheckAttendanceController";
+    private static final String DELETE_GROUP = "DeleteGroupController";
+    private static final String ADD_MEMBER = "AddMemberController";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -74,8 +76,8 @@ public class MainController extends HttpServlet {
                     url = CHANGE_ROLE;
                     break;
                 case "SearchGroup":
-                        url = SEARCH_GROUP;
-                        break;
+                    url = SEARCH_GROUP;
+                    break;
                 case "ViewGroupDetail":
                     url = VIEW_GROUP_DETAIL;
                     break;
@@ -90,6 +92,12 @@ public class MainController extends HttpServlet {
                     break;
                 case "UpdateEvent":
                     url = UPDATE_EVENT;
+                    break;
+                case "DeleteGroup":
+                    url = DELETE_GROUP;
+                    break;
+                case "AddMember":
+                    url = ADD_MEMBER;
                     break;
                 default:
                     request.setAttribute("ERROR", "Action is invalid");

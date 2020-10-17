@@ -7,6 +7,8 @@ package binhtt.controllers;
 
 import binhtt.blos.GroupBLO;
 import binhtt.entities.TblGroup;
+import binhtt.entities.TblUser;
+import binhtt.utils.RoleConstant;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,13 +17,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author binht
  */
 public class SearchGroupController extends HttpServlet {
-    private static final String SUCCESS = "group_admin.jsp";
+    private static final String SUCCESS = "group_manage.jsp";
     private static final String ERROR = "utils/error.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,14 +40,36 @@ public class SearchGroupController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = SUCCESS;
         try {
+            HttpSession session = request.getSession();
+            TblUser user = ((TblUser)session.getAttribute("user"));
+            int role = user.getRoleId().getId();
             String searchGrTxt = request.getParameter("searchGrTxt");
-            System.out.println(searchGrTxt.length());
-            if(searchGrTxt.isEmpty()){
-                GroupBLO blo = new GroupBLO();
-                List<TblGroup> groups = blo.getAllGroup();
-                request.setAttribute("LIST_GROUP", groups);
-//                System.out.println(groups.toArray().length);
+            GroupBLO blo = new GroupBLO();
+            List<TblGroup> groups = null;
+            switch (role){
+                case RoleConstant.ADMIN:
+                    if(searchGrTxt.isEmpty()){
+                        groups = blo.getAllGroup();
+                    } else {
+                        groups = blo.getGroupByName(searchGrTxt);
+                    }
+                    break;
+                case RoleConstant.LEADER:
+                    if(searchGrTxt.isEmpty()){
+                        groups = blo.getAllGroup(user.getStudentID());
+                    } else {
+                        groups = blo.getGroupByName(searchGrTxt, user.getStudentID());
+                    }
+                    break;
+                case RoleConstant.MEMBER:
+                    if(searchGrTxt.isEmpty()){
+                        groups = blo.getAllGroupOfAMember(user.getStudentID());
+                    } else {
+                        groups = blo.getGroupOfAMemberByName(user.getStudentID(), searchGrTxt);
+                    }
+                    break;
             }
+            request.setAttribute("LIST_GROUP", groups);
         } catch (Exception e){
             log("error at SearchGroupController: " + e.getMessage());
         } finally {

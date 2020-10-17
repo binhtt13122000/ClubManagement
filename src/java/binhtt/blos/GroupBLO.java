@@ -2,6 +2,7 @@ package binhtt.blos;
 
 import binhtt.entities.TblGroup;
 import binhtt.entities.TblGroupDetail;
+import binhtt.entities.TblUser;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,7 +31,7 @@ public class GroupBLO implements Serializable {
         }
     }
 
-    public TblGroup getAGroup(String groupID){
+    public TblGroup getAGroup(String groupID) throws Exception{
         EntityManager em = emf.createEntityManager();
         TblGroup group = null;
         try {
@@ -41,7 +42,7 @@ public class GroupBLO implements Serializable {
         return group;
     }
 
-    public List<TblGroup> getAllGroup(){
+    public List<TblGroup> getAllGroup() throws Exception{
         EntityManager em = emf.createEntityManager();
         List<TblGroup> groups;
         try {
@@ -53,7 +54,73 @@ public class GroupBLO implements Serializable {
         return groups;
     }
 
-    public List<TblGroupDetail> getGroupDetailByGroupId(String id){
+    public List<TblGroup> getAllGroup(String leaderId) throws Exception{
+        EntityManager em = emf.createEntityManager();
+        List<TblGroup> groups;
+        try {
+            TypedQuery<TblGroup> query = em.createQuery("SELECT t FROM TblGroup t WHERE t.leaderId.studentID = :leaderId", TblGroup.class);
+            query.setParameter("leaderId", leaderId);
+            groups = query.getResultList();
+        } finally {
+            em.close();
+        }
+        return groups;
+    }
+
+    public List<TblGroup> getGroupByName(String name) throws Exception{
+        EntityManager em = emf.createEntityManager();
+        List<TblGroup> groups;
+        try {
+            TypedQuery<TblGroup> query = em.createQuery("SELECT t FROM TblGroup  t WHERE t.groupName LIKE :name", TblGroup.class);
+            query.setParameter("name", "%" + name + "%");
+            groups = query.getResultList();
+        } finally {
+            em.close();
+        }
+        return groups;
+    }
+
+    public List<TblGroup> getAllGroupOfAMember(String memberId) throws Exception{
+        EntityManager em = emf.createEntityManager();
+        List<TblGroup> groups;
+        try {
+            TypedQuery<TblGroup> query = em.createQuery("SELECT t.groupID FROM TblGroupDetail t WHERE t.memberID.studentID = :memberId", TblGroup.class);
+            query.setParameter("memberId", memberId);
+            groups = query.getResultList();
+        } finally {
+            em.close();
+        }
+        return groups;
+    }
+
+    public List<TblGroup> getGroupOfAMemberByName(String memberId, String name) throws Exception{
+        EntityManager em = emf.createEntityManager();
+        List<TblGroup> groups;
+        try {
+            TypedQuery<TblGroup> query = em.createQuery("SELECT t.groupID FROM TblGroupDetail t WHERE t.memberID.studentID = :memberId AND t.groupID.groupName LIKE :name", TblGroup.class);
+            query.setParameter("memberId", memberId);
+            query.setParameter("name", "%" + name + "%");
+            groups = query.getResultList();
+        } finally {
+            em.close();
+        }
+        return groups;
+    }
+    public List<TblGroup> getGroupByName(String name, String leaderId) throws Exception{
+        EntityManager em = emf.createEntityManager();
+        List<TblGroup> groups;
+        try {
+            TypedQuery<TblGroup> query = em.createQuery("SELECT t FROM TblGroup  t WHERE t.groupName LIKE :name AND t.leaderId = :leaderId", TblGroup.class);
+            query.setParameter("name", "%" + name + "%");
+            query.setParameter("leaderId", leaderId);
+            groups = query.getResultList();
+        } finally {
+            em.close();
+        }
+        return groups;
+    }
+
+    public List<TblGroupDetail> getGroupDetailByGroupId(String id) throws Exception{
         EntityManager em = emf.createEntityManager();
         List<TblGroupDetail> groupDetails;
         try {
@@ -64,5 +131,36 @@ public class GroupBLO implements Serializable {
             em.close();
         }
         return groupDetails;
+    }
+
+    public boolean deleteGroup(String id) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        boolean valid = false;
+        try {
+            TblGroup group = em.find(TblGroup.class, id);
+            if(group != null){
+                group.setStatus("BLOCK");
+                em.getTransaction().begin();
+                em.merge(group);
+                em.getTransaction().commit();
+                valid = true;
+            }
+        } finally {
+            em.close();
+        }
+        return valid;
+    }
+
+    public List<TblUser> getUserNotInGroup(String id) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        List<TblUser> user;
+        try {
+            TypedQuery<TblUser> query = em.createQuery("SELECT t.memberID FROM TblGroupDetail t WHERE t.groupID.groupID != :id", TblUser.class);
+            query.setParameter("id", id);
+            user = query.getResultList();
+        } finally {
+            em.close();
+        }
+        return user;
     }
 }

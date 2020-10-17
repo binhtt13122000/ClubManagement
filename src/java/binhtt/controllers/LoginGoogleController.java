@@ -24,9 +24,8 @@ import javax.servlet.http.HttpSession;
 public class LoginGoogleController extends HttpServlet {
 
     private static final String ERROR = "index.jsp";
-    private static final String ADMIN = "MainController?btnAction=SearchAccount&searchTxt=";
-    private static final String LEADER = "leader.jsp";
-    private static final String MEMBER = "member.jsp";
+    private static final String HOME = "MainController?btnAction=SearchAccount&searchTxt=";
+    private static final String MEMBER_HOME = "user_home.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -50,27 +49,17 @@ public class LoginGoogleController extends HttpServlet {
                 GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
                 AuthenticationBLO blo = new AuthenticationBLO();
                 TblUser user = blo.checkLoginByGoogle(googlePojo.getEmail());
-                if (user.getStatus() == false) {
-                request.setAttribute("ERROR", "This account is block!");
-            } else {
-                int role = user.getRoleId().getId();
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                switch (role) {
-                    case RoleConstant.ADMIN:
-                        url = ADMIN;
-                        break;
-                    case RoleConstant.LEADER:
-                        url = LEADER;
-                        break;
-                    case RoleConstant.MEMBER:
-                        url = MEMBER;
-                        break;
-                    default:
-                        request.setAttribute("ERROR", "Invalid Username or Password");
-                        break;
+                if (!user.getStatus()) {
+                    request.setAttribute("ERROR", "This account is block!");
+                } else {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("user", user);
+                    if(user.getRoleId().getId() == RoleConstant.MEMBER){
+                        url = MEMBER_HOME;
+                    } else {
+                        url = HOME;
+                    }
                 }
-            }
             }
         } catch (Exception e) {
             log("Exception at gg login :" + e.getMessage());

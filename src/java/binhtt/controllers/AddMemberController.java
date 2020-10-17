@@ -5,8 +5,10 @@
  */
 package binhtt.controllers;
 
+import binhtt.blos.GroupBLO;
 import binhtt.blos.UserBLO;
 import binhtt.entities.TblUser;
+import binhtt.utils.RoleConstant;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,7 +22,9 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author binht
  */
-public class SearchAccountController extends HttpServlet {
+public class AddMemberController extends HttpServlet {
+    private static final String ERROR = "utils/error.jsp";
+    private static final String SUCCESS = "cart_group.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -33,20 +37,17 @@ public class SearchAccountController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String url = ERROR;
         try {
-            String search = request.getParameter("searchTxt");
-            UserBLO blo = new UserBLO();
-            List<TblUser> users;
-            if(search.isEmpty()){
-                users = blo.getAllUsers();
-            } else {
-                users = blo.getUserByFullName(search);
-            }
-            request.setAttribute("LIST_DTO", users);
+            String id = request.getParameter("id");
+            GroupBLO bloGroup = new GroupBLO();
+            List<TblUser> users = bloGroup.getUserNotInGroup(id);
+            request.setAttribute("LIST_USER", users);
+            url = SUCCESS;
         } catch (Exception e){
-            log("Error at Search Account Controller: " + e.getMessage());
+            log("Exception at AddMemberController: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher("home.jsp").forward(request, response);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

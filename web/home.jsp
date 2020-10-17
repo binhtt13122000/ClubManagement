@@ -13,12 +13,14 @@
         <title>Admin</title>
     </head>
     <body>
-    <jsp:include page="authenticatedheader.jsp"></jsp:include>
+        <jsp:include page="authenticatedheader.jsp"></jsp:include>
         <div class="container-fluid">
             <div class="row flex-xl-nowrap">
                 <jsp:include page="utils/navigation.jsp"></jsp:include>
                 <main class="col-md-9 col-xl-9 py-md-3 pl-md-5 bd-content" role="main">
-                    <button onclick="location.href='create.jsp'" type="button" class="btn btn-primary">Create new Account</button>
+                    <c:if test="${sessionScope.user.roleId.id == 1}">
+                        <button onclick="location.href='create.jsp'" type="button" class="btn btn-primary">Create new Account</button>
+                    </c:if>
                     <form action="MainController?btnAction=SearchAccount" method="post">
                         <div class="form-group">
                             <div class="mt-3"></div>

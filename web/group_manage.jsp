@@ -20,6 +20,17 @@
             <div class="mt-3">
                 <div class="row">
                     <div class="col-md-8">
+                        <c:if test="${sessionScope.user.roleId.id == 2}" var="isLeader">
+                            <button type="button" class="btn mb-3 btn-dark">Create Group</button>
+                        </c:if>
+                        <form action="MainController?btnAction=SearchGroup" method="post">
+                            <div class="form-group">
+                                <input required id="search" placeholder="Search Group" name="searchGrTxt" value="${param.searchTxt}" class="form-control" aria-describedby="search"/>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="button" onclick="window.location.href='MainController?btnAction=SearchGroup&searchGrTxt='" class="btn btn-secondary">Reset</button>
+                        </form>
+                        <div class="mt-3"></div>
                         <c:set var="groups" value="${requestScope.LIST_GROUP}"/>
                         <c:if test="${empty groups}" var="checkEmpty">
                             <div>No group</div>
@@ -34,7 +45,13 @@
                                         <h5 class="card-title">${group.groupName}</h5>
                                         <p class="card-text">${group.groupDesc}</p>
                                         <p class="card-text"><strong>Total :</strong>${group.totalMember}</p>
-                                        <a href="MainController?btnAction=ViewGroupDetail&id=${group.groupID}" class="btn btn-primary">See Detail</a>
+                                        <a href="MainController?btnAction=ViewGroupDetail&id=${group.groupID}&searchGrTxt=${param.searchGrTxt}" class="btn btn-primary">See Detail</a>
+                                        <c:if test="${!group.status.equals('BLOCK')}">
+                                            <c:if test="${isLeader}">
+                                                <a href="MainController?btnAction=AddMember&id=${group.groupID}" class="btn btn-danger">Add Member</a>
+                                                <a href="MainController?btnAction=DeleteGroup&id=${group.groupID}&searchGrTxt=${param.searchGrTxt}" class="btn btn-primary">Delete Group</a>
+                                            </c:if>
+                                        </c:if>
                                     </div>
                                 </div>
                             </c:forEach>

@@ -5,12 +5,10 @@
  */
 package binhtt.controllers;
 
-import binhtt.blos.UserBLO;
-import binhtt.entities.TblUser;
+import binhtt.blos.GroupBLO;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +18,9 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author binht
  */
-public class SearchAccountController extends HttpServlet {
+public class DeleteGroupController extends HttpServlet {
+    private static final String ERROR = "utils/error.jsp";
+    private static final String SUCCESS = "SearchGroupController";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -33,20 +33,20 @@ public class SearchAccountController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String url = ERROR;
         try {
-            String search = request.getParameter("searchTxt");
-            UserBLO blo = new UserBLO();
-            List<TblUser> users;
-            if(search.isEmpty()){
-                users = blo.getAllUsers();
+            String id = request.getParameter("id");
+            GroupBLO blo = new GroupBLO();
+            boolean check = blo.deleteGroup(id);
+            if(check){
+                url = SUCCESS;
             } else {
-                users = blo.getUserByFullName(search);
+                request.setAttribute("ERROR", "ID is not available!");
             }
-            request.setAttribute("LIST_DTO", users);
         } catch (Exception e){
-            log("Error at Search Account Controller: " + e.getMessage());
+            log("error at DeleteGroupController: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher("home.jsp").forward(request, response);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 
