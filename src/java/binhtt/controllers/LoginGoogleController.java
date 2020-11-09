@@ -7,7 +7,7 @@ package binhtt.controllers;
 
 import binhtt.blos.AuthenticationBLO;
 import binhtt.entities.TblUser;
-import binhtt.utils.RoleConstant;
+import binhtt.utils.constant.RoleConstant;
 import binhtt.utils.accessgoogle.common.GooglePojo;
 import binhtt.utils.accessgoogle.common.GoogleUtils;
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class LoginGoogleController extends HttpServlet {
 
     private static final String ERROR = "index.jsp";
     private static final String HOME = "MainController?btnAction=SearchAccount&searchTxt=";
-    private static final String MEMBER_HOME = "user_home.jsp";
+    private static final String MEMBER_HOME = "MainController?btnAction=SearchNotification";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,7 +43,7 @@ public class LoginGoogleController extends HttpServlet {
         try {
             String code = request.getParameter("code");
             if (code == null || code.isEmpty()) {
-                request.setAttribute("ERROR", "An lol roi");
+                request.setAttribute("ERROR", "Something went wrong!");
             } else {
                 String accessToken = GoogleUtils.getToken(code);
                 GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
@@ -63,6 +63,7 @@ public class LoginGoogleController extends HttpServlet {
             }
         } catch (Exception e) {
             log("Exception at gg login :" + e.getMessage());
+            request.setAttribute("ERROR", "This account is not a F-Code member!");
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

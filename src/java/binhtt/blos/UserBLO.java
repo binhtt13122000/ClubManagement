@@ -1,5 +1,7 @@
 package binhtt.blos;
 
+import binhtt.entities.TblEvent;
+import binhtt.entities.TblEventDetail;
 import binhtt.entities.TblRole;
 import binhtt.entities.TblUser;
 
@@ -27,6 +29,7 @@ public class UserBLO implements Serializable {
         }
     }
 
+    //get all user
     public List<TblUser> getAllUsers() throws Exception{
         EntityManager em = emf.createEntityManager();
         List<TblUser> users = null;
@@ -39,6 +42,7 @@ public class UserBLO implements Serializable {
         return users;
     }
 
+    //get all user by name
     public List<TblUser> getUserByFullName(String search) throws Exception{
         EntityManager em = emf.createEntityManager();
         List<TblUser> users;
@@ -52,6 +56,33 @@ public class UserBLO implements Serializable {
         return users;
     }
 
+    //get all user by role
+    public List<TblUser> getAllUsersByRole(int id) throws Exception{
+        EntityManager em = emf.createEntityManager();
+        List<TblUser> users = null;
+        try {
+            TypedQuery<TblUser> query = em.createQuery("SELECT t FROM TblUser t WHERE t.roleId.id = :id", TblUser.class);
+            query.setParameter("id", id);
+            users = query.getResultList();
+        } finally {
+            em.close();
+        }
+        return users;
+    }
+
+    //get one user
+    public TblUser getOne(String id){
+        EntityManager em = emf.createEntityManager();
+        TblUser user;
+        try {
+            user = em.find(TblUser.class,id);
+        } finally {
+            em.close();
+        }
+        return user;
+    }
+
+    //update profile <=> update TblUser
     public boolean updateProfile(TblUser user, String studentID) throws Exception{
         EntityManager em = emf.createEntityManager();
         boolean valid = false;
@@ -74,6 +105,7 @@ public class UserBLO implements Serializable {
         return valid;
     }
 
+    //change status <=> Update TblUser
     public boolean changeStatus(String studentID) throws Exception {
         EntityManager em = emf.createEntityManager();
         boolean valid = false;
@@ -92,6 +124,7 @@ public class UserBLO implements Serializable {
         return valid;
     }
 
+    //change role <=> Update TblUser
     public boolean changeRole(String studentID, int newRole) throws Exception {
         EntityManager em = emf.createEntityManager();
         boolean valid = false;
@@ -110,6 +143,8 @@ public class UserBLO implements Serializable {
         }
         return valid;
     }
+
+    //create user
     public boolean create(TblUser user) throws Exception {
         EntityManager em = emf.createEntityManager();
         boolean valid = false;
@@ -127,17 +162,43 @@ public class UserBLO implements Serializable {
         return valid;
     }
 
-    public List<TblUser> getAllUsersByRole(int id) throws Exception{
+    //get email
+    public String[] getEmail() throws Exception {
         EntityManager em = emf.createEntityManager();
-        List<TblUser> users = null;
+        String[] emailList;
         try {
-            TypedQuery<TblUser> query = em.createQuery("SELECT t FROM TblUser t WHERE t.roleId.id = :id", TblUser.class);
-            query.setParameter("id", id);
-            users = query.getResultList();
+            TypedQuery<String> query = em.createQuery("SELECT t.email FROM TblUser t WHERE t.getNotification = true and t.status = true", String.class);
+            List<String> emails = query.getResultList();
+            emailList = new String[emails.size()];
+            int index = 0;
+            for (String email: emails) {
+                emailList[index++] = email;
+            }
         } finally {
             em.close();
         }
-        return users;
+        return emailList;
+    }
+
+    public boolean isInCLB(String studentID, String email) throws Exception {
+        boolean valid = false;
+        EntityManager em = emf.createEntityManager();
+        try {
+            TblUser user = em.find(TblUser.class, studentID);
+            if (user != null) {
+                valid = true;
+            } else {
+                TypedQuery<TblUser> query = em.createQuery("SELECT u FROM TblUser u WHERE u.email = :email", TblUser.class);
+                query.setParameter("email", email);
+                TblUser user1 = query.getSingleResult();
+                valid = true;
+            }
+        } catch (Exception e){
+            valid = false;
+        } finally {
+            em.close();
+        }
+        return valid;
     }
 
 }

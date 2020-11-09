@@ -13,7 +13,7 @@
 </head>
 <body>
 
-    <jsp:include page="authenticatedheader.jsp"></jsp:include>
+    <jsp:include page="header/authenticatedheader.jsp"></jsp:include>
     <div class="container-fluid">
         <div class="row flex-xl-nowrap">
             <jsp:include page="utils/navigation.jsp"></jsp:include>
@@ -25,10 +25,10 @@
         <c:if test="${empty user.avatar}">
             <img src="images/anonymous_avatar.jpg" width="300" height="300" class="rounded mx-auto d-block rounded-circle" alt="logo">
         </c:if>
-            <form id="update-form" method="post" action="MainController?btnAction=EditProfile" enctype="multipart/form-data">
+            <form id="update-form" method="post" action="${pageContext.request.contextPath}/MainController?btnAction=EditProfile" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="file">Avatar</label>
-                <input name="avtUrl" type="file" value="${user.avatar}" class="form-control-file" id="file">
+                <input name="avtUrl" accept="image/*" type="file" value="${user.avatar}" class="form-control-file" id="file">
             </div>
             <input type="hidden" name="avtStr" value="${user.avatar}" />
             <div class="form-group">

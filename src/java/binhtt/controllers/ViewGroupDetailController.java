@@ -10,7 +10,6 @@ import binhtt.entities.TblGroup;
 import binhtt.entities.TblGroupDetail;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author binht
  */
 public class ViewGroupDetailController extends HttpServlet {
-    private static final String SUCESS = "MainController?btnAction=SearchGroup&searchGrTxt=";
+    private static final String SUCESS = "SearchGroupController";
     private static final String ERROR = "utils/error.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,7 +40,10 @@ public class ViewGroupDetailController extends HttpServlet {
             String id = request.getParameter("id");
             GroupBLO blo = new GroupBLO();
             List<TblGroupDetail> groupDetails = blo.getGroupDetailByGroupId(id);
-            TblGroup group = groupDetails.get(0).getGroupID();
+            TblGroup group = null;
+            if(groupDetails.size() > 0){
+                group = groupDetails.get(0).getGroupID();                
+            }
             request.setAttribute("LIST_GROUP_MEMBER", groupDetails);
             request.setAttribute("GROUP_DETAIL", group);
             url = SUCESS;

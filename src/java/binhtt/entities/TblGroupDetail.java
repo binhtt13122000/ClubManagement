@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,16 +34,15 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "TblGroupDetail.findById", query = "SELECT t FROM TblGroupDetail t WHERE t.id = :id")
     , @NamedQuery(name = "TblGroupDetail.findByStatus", query = "SELECT t FROM TblGroupDetail t WHERE t.status = :status")
     , @NamedQuery(name = "TblGroupDetail.findByAddTime", query = "SELECT t FROM TblGroupDetail t WHERE t.addTime = :addTime")
-    , @NamedQuery(name = "TblGroupDetail.findByRemoveTime", query = "SELECT t FROM TblGroupDetail t WHERE t.removeTime = :removeTime")
-    , @NamedQuery(name = "TblGroupDetail.findByFullname", query = "SELECT t FROM TblGroupDetail t WHERE t.fullname = :fullname")
-    , @NamedQuery(name = "TblGroupDetail.findByEmail", query = "SELECT t FROM TblGroupDetail t WHERE t.email = :email")})
+    , @NamedQuery(name = "TblGroupDetail.findByRemoveTime", query = "SELECT t FROM TblGroupDetail t WHERE t.removeTime = :removeTime")})
 public class TblGroupDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id", nullable = false, length = 10)
-    private String id;
+    @Column(name = "id", nullable = false)
+    private Integer id;
     @Basic(optional = false)
     @Column(name = "status", nullable = false, length = 10)
     private String status;
@@ -52,11 +53,6 @@ public class TblGroupDetail implements Serializable {
     @Column(name = "removeTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date removeTime;
-    @Column(name = "fullname", length = 30)
-    private String fullname;
-    @Basic(optional = false)
-    @Column(name = "email", nullable = false, length = 40)
-    private String email;
     @JoinColumn(name = "groupID", referencedColumnName = "groupID", nullable = false)
     @ManyToOne(optional = false)
     private TblGroup groupID;
@@ -67,22 +63,21 @@ public class TblGroupDetail implements Serializable {
     public TblGroupDetail() {
     }
 
-    public TblGroupDetail(String id) {
+    public TblGroupDetail(Integer id) {
         this.id = id;
     }
 
-    public TblGroupDetail(String id, String status, Date addTime, String email) {
+    public TblGroupDetail(Integer id, String status, Date addTime) {
         this.id = id;
         this.status = status;
         this.addTime = addTime;
-        this.email = email;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -108,22 +103,6 @@ public class TblGroupDetail implements Serializable {
 
     public void setRemoveTime(Date removeTime) {
         this.removeTime = removeTime;
-    }
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public TblGroup getGroupID() {

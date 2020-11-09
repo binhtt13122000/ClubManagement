@@ -6,12 +6,11 @@
 package binhtt.controllers;
 
 import binhtt.blos.GroupBLO;
-import binhtt.blos.UserBLO;
+import binhtt.dtos.CartGroupObj;
+import binhtt.entities.TblGroup;
 import binhtt.entities.TblUser;
-import binhtt.utils.RoleConstant;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author binht
  */
 public class AddMemberController extends HttpServlet {
-    private static final String ERROR = "utils/error.jsp";
+    private static final String ERROR = "MainController?btnAction=SearchGroup";
     private static final String SUCCESS = "cart_group.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,16 +33,34 @@ public class AddMemberController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    //get parameter id (groupID)
+    //get cart
+    //check available cart => ERROR (Cart is available!) / GROUP (this group), LIST_USER (no in group);
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
             String id = request.getParameter("id");
-            GroupBLO bloGroup = new GroupBLO();
-            List<TblUser> users = bloGroup.getUserNotInGroup(id);
-            request.setAttribute("LIST_USER", users);
-            url = SUCCESS;
+            CartGroupObj cart = (CartGroupObj) request.getSession().getAttribute("cart");
+            boolean valid = false;
+            if(cart != null){
+                if(!cart.getGroup().getGroupID().equals(id)){
+                    request.setAttribute("ERROR", "A cart is available! please checkout first!!!");
+                } else {
+                    valid = true;
+                }
+            } else {
+                valid = true;
+            }
+            if(valid){
+                GroupBLO bloGroup = new GroupBLO();
+                List<TblUser> users = bloGroup.getUserNotInGroup(id);
+                TblGroup group = bloGroup.getAGroup(id);
+                request.setAttribute("GROUP", group);
+                request.setAttribute("LIST_USER", users);
+                url = SUCCESS;
+            }
         } catch (Exception e){
             log("Exception at AddMemberController: " + e.getMessage());
         } finally {

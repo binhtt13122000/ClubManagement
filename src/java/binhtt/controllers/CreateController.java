@@ -8,10 +8,9 @@ package binhtt.controllers;
 import binhtt.blos.UserBLO;
 import binhtt.entities.TblRole;
 import binhtt.entities.TblUser;
-import binhtt.utils.RoleConstant;
+import binhtt.utils.constant.RoleConstant;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author binht
  */
 public class CreateController extends HttpServlet {
-    private final static String INVALID = "utils/error.jsp";
+    private final static String INVALID = "create.jsp";
     private final static String SUCCESS = "home.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,6 +33,13 @@ public class CreateController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+
+    //get studentIDTxt;
+    //get fullnameTxt
+    //phoneTxt
+    //emailTxt
+    //setter
+    //create => SUCCESS => LIST_DTO (all users);
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -63,6 +69,7 @@ public class CreateController extends HttpServlet {
             }
         } catch (Exception e){
             log("Exception at CreateController: " + e.getMessage());
+            request.setAttribute("ERROR", "Phone or Email is duplicate!");
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

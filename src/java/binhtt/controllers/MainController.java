@@ -35,6 +35,22 @@ public class MainController extends HttpServlet {
     private static final String CHECK_ATTENDANCE = "CheckAttendanceController";
     private static final String DELETE_GROUP = "DeleteGroupController";
     private static final String ADD_MEMBER = "AddMemberController";
+    private static final String ADD_TO_CART = "AddToGroupCartController";
+    private static final String REMOVE_FROM_GROUP_CART= "RemoveFromGroupCartController";
+    private static final String ADD_TO_GROUP = "AddToGroupController";
+    private static final String REMOVE_FROM_GROUP = "RemoveFromGroupController";
+    private static final String CREATE_GROUP = "CreateGroupController";
+    private static final String ADD_EVENT_TO_CART = "AddToEventCartController";
+    private static final String REMOVE_FROM_EVENT_CART = "RemoveFromEventCartController";
+    private static final String REGISTER_EVENTS = "RegisterEventsController";
+    private static final String VIEW_HISTORY = "ViewHistoryController";
+    private static final String CREATE_COMMENT = "CreateCommentController";
+    private static final String AUTHENTICATE_GUEST = "AuthenticateGuestController";
+    private static final String SAVE_ATTENDANCE = "SaveAttendanceController";
+    private static final String SEARCH_NOTIFICATION = "SearchNotificationController";
+    private static final String SEARCH_EVENT_BY_DATE = "SearchEventByDateController";
+    private static final String VIEW_HISTORY_REGISTER = "ViewHistoryRegisterController";
+    private static final String DELETE_COMMENT = "DeleteCommentController";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -98,6 +114,57 @@ public class MainController extends HttpServlet {
                     break;
                 case "AddMember":
                     url = ADD_MEMBER;
+                    break;
+                case "AddToCart":
+                    url = ADD_TO_CART;
+                    break;
+                case "RemoveFromGroupCart":
+                    url = REMOVE_FROM_GROUP_CART;
+                    break;
+                case "AddToGroup":
+                    url = ADD_TO_GROUP;
+                    break;
+                case "RemoveFromGroup":
+                    url = REMOVE_FROM_GROUP;
+                    break;
+                case "CreateGroup":
+                    url = CREATE_GROUP;
+                    break;
+                case "AddToEventCart":
+                    url = ADD_EVENT_TO_CART;
+                    break;
+                case "RemoveFromEventCart":
+                    url = REMOVE_FROM_EVENT_CART;
+                    break;
+                case "RegisterEvents":
+                    url = REGISTER_EVENTS;
+                    break;
+                case "ViewHistory":
+                    url = VIEW_HISTORY;
+                    break;
+                case "CreateComment":
+                    url = CREATE_COMMENT;
+                    break;
+                case "AuthenticateGuest":
+                    url = AUTHENTICATE_GUEST;
+                    break;
+                case "CheckAttendance":
+                    url = CHECK_ATTENDANCE;
+                    break;
+                case "SaveAttendance":
+                    url = SAVE_ATTENDANCE;
+                    break;
+                case "SearchNotification":
+                    url = SEARCH_NOTIFICATION;
+                    break;
+                case "SearchEventByDate":
+                    url = SEARCH_EVENT_BY_DATE;
+                    break;
+                case "ViewHistoryRegister":
+                    url = VIEW_HISTORY_REGISTER;
+                    break;
+                case "DeleteComment":
+                    url = DELETE_COMMENT;
                     break;
                 default:
                     request.setAttribute("ERROR", "Action is invalid");

@@ -7,11 +7,11 @@ package binhtt.controllers;
 
 import binhtt.blos.EventBLO;
 import binhtt.blos.NotificationBLO;
+import binhtt.blos.UserBLO;
 import binhtt.entities.TblEvent;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import binhtt.entities.TblNotifications;
+import binhtt.utils.function.Utils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -30,7 +31,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  */
 public class CreateEventController extends HttpServlet {
     private static final String ERROR = "utils/error.jsp";
-    private static final String SUCCESS = "event_admin.jsp";
+    private static final String SUCCESS = "event_manage.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -124,8 +125,6 @@ public class CreateEventController extends HttpServlet {
             } catch (Exception e) {
                 log("Loi gi do: " + e.getMessage());
             }
-            System.out.println("time start: " + timeStartEvent.toString());
-            System.out.println("time close: " + timeCloseEvent.toString());
             TblEvent event = new TblEvent();
             Date date = new Date();
             SimpleDateFormat ft = new SimpleDateFormat("yyMMddhhmmssMs");
@@ -143,6 +142,7 @@ public class CreateEventController extends HttpServlet {
             event.setEventStatus("REGISTER");
             event.setNumOfAttendees(0);
             event.setNumOfAttendees(0);
+            event.setCreatedTime(date);
             EventBLO blo = new EventBLO();
             NotificationBLO bloNotification = new NotificationBLO();
             TblNotifications notifications = new TblNotifications();
@@ -150,6 +150,7 @@ public class CreateEventController extends HttpServlet {
             notifications.setContentNoti("F-Code's Event: " + eventName + " is upcoming!");
             notifications.setIdNoti("n" + datetime);
             notifications.setTimeCreated(date);
+            Utils.sendMail(new UserBLO().getEmail(), "F-Code's Event: " + eventName + " is upcoming!");
             boolean check = blo.create(event);
             boolean checkNotification = bloNotification.createNotification(notifications);
             if(check && checkNotification){

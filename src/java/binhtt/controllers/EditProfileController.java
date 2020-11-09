@@ -79,7 +79,6 @@ public class EditProfileController extends HttpServlet {
                                 studentID = fieldValue;
                                 break;
                             case "passwordTxt":
-                                System.out.println(fieldValue.trim().length());
                                 if (fieldValue.trim().length() > 0) {
                                     password = fieldValue;
                                 } else {
@@ -127,7 +126,6 @@ public class EditProfileController extends HttpServlet {
                 }
                 TblUser user = new TblUser();
                 user.setFullname(fullname);
-                System.out.println(password);
                 user.setPassword(password);
                 user.setStudentID(studentID);
                 user.setPhone(phone);
@@ -144,9 +142,11 @@ public class EditProfileController extends HttpServlet {
                     url = SUCCESS;
                     TblUser authenticatedUser = (TblUser) session.getAttribute("user");
                     if (authenticatedUser != null) {
+                        user.setRoleId(authenticatedUser.getRoleId());
+                        user.setStatus(authenticatedUser.getStatus());
                         session.setAttribute("user", user);
                     } else {
-                        request.setAttribute("ERROR", "cc an lol roi");
+                        request.setAttribute("ERROR", "Something wrong!");
                     }
                 }
             } catch (FileUploadException e) {

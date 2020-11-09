@@ -10,9 +10,10 @@
 <html>
 <head>
     <title>Admin Group</title>
+    <link href="snackbar/snackbar.css" rel="stylesheet" type="text/css">
 </head>
-<body>
-<jsp:include page="authenticatedheader.jsp"></jsp:include>
+<body onload="showSnackBar()">
+<jsp:include page="header/authenticatedheader.jsp"></jsp:include>
 <div class="container-fluid">
     <div class="row flex-xl-nowrap">
         <jsp:include page="utils/navigation.jsp"></jsp:include>
@@ -21,11 +22,11 @@
                 <div class="row">
                     <div class="col-md-8">
                         <c:if test="${sessionScope.user.roleId.id == 2}" var="isLeader">
-                            <button type="button" class="btn mb-3 btn-dark">Create Group</button>
+                            <button onclick="window.location.href='create_group.jsp'" type="button" class="btn mb-3 btn-dark">Create Group</button>
                         </c:if>
                         <form action="MainController?btnAction=SearchGroup" method="post">
                             <div class="form-group">
-                                <input required id="search" placeholder="Search Group" name="searchGrTxt" value="${param.searchTxt}" class="form-control" aria-describedby="search"/>
+                                <input required id="search" placeholder="Search Group" name="searchGrTxt" value="${param.searchGrTxt}" class="form-control" aria-describedby="search"/>
                             </div>
                             <button type="submit" class="btn btn-primary">Search</button>
                             <button type="button" onclick="window.location.href='MainController?btnAction=SearchGroup&searchGrTxt='" class="btn btn-secondary">Reset</button>
@@ -48,7 +49,7 @@
                                         <a href="MainController?btnAction=ViewGroupDetail&id=${group.groupID}&searchGrTxt=${param.searchGrTxt}" class="btn btn-primary">See Detail</a>
                                         <c:if test="${!group.status.equals('BLOCK')}">
                                             <c:if test="${isLeader}">
-                                                <a href="MainController?btnAction=AddMember&id=${group.groupID}" class="btn btn-danger">Add Member</a>
+                                                <a href="MainController?btnAction=AddMember&id=${group.groupID}&searchGrTxt=${param.searchGrTxt}" class="btn btn-danger">Add Member</a>
                                                 <a href="MainController?btnAction=DeleteGroup&id=${group.groupID}&searchGrTxt=${param.searchGrTxt}" class="btn btn-primary">Delete Group</a>
                                             </c:if>
                                         </c:if>
@@ -76,11 +77,19 @@
                                     </div>
                                 </div>
                                 <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            ${groupDetail.leaderId.fullname}
+                                        <span class="badge badge-primary badge-pill">${groupDetail.leaderId.studentID}</span>
+                                    </li>
                                     <c:forEach var="groupMember" items="${groupMembers}">
-
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                ${groupMember.memberID.fullname}
-                                            <span class="badge badge-primary badge-pill">${groupMember.memberID.studentID}</span>
+                                                    ${groupMember.memberID.fullname}
+                                            <div>
+                                                <c:if test="${isLeader}">
+                                                    <a href="MainController?btnAction=RemoveFromGroup&idMember=${groupMember.memberID.studentID}&id=${groupDetail.groupID}&searchGrTxt=${param.searchGrTxt}" class="badge badge-danger">-</a>
+                                                </c:if>
+                                                <span class="badge badge-primary badge-pill">${groupMember.memberID.studentID}</span>
+                                            </div>
                                         </li>
                                     </c:forEach>
                                 </ul>
@@ -89,9 +98,10 @@
                     </div>
                 </div>
             </div>
-
         </main>
     </div>
 </div>
+<div id="snackbar">${requestScope.ERROR}</div>
+<script src="snackbar/snackbar.js"></script>
 </body>
 </html>

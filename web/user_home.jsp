@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: binht
@@ -8,15 +10,25 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>User Home</title>
 </head>
 <body>
-    <jsp:include page="authenticatedheader.jsp"></jsp:include>
+    <jsp:include page="header/authenticatedheader.jsp"></jsp:include>
     <div class="container-fluid">
         <div class="row flex-xl-nowrap">
             <jsp:include page="utils/navigation.jsp"></jsp:include>
             <main class="col-md-9 col-xl-9 py-md-3 pl-md-5 bd-content" role="main">
-                eat
+                <h3 class="display-3">Notifications</h3>
+                <c:forEach items="${requestScope.LIST_NOTIFICATION}" var="notification">
+                    <fmt:formatDate type="both" dateStyle="short" timeStyle="short" value="${notification.timeCreated}" var="timeCreated"/>
+                    <div class="card mt-2">
+                        <div class="card-body">
+                            <p class="card-text">${notification.contentNoti}</p>
+                            <p class="card-text">${timeCreated}</p>
+                            <button onclick="window.location.href='MainController?btnAction=ViewEvent&id=${notification.eventID.eventID}'" class="btn small btn-primary">View</button>
+                        </div>
+                    </div>
+                </c:forEach>
             </main>
         </div>
     </div>

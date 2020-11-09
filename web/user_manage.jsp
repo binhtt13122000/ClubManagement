@@ -11,9 +11,9 @@
 <head>
     <title>User_manage</title>
 </head>
-<body>
-        <c:set value="${requestScope.LIST_DTO}" var="listDto"/>
-        <c:if test="${empty listDto}" var="checkList">
+<body onload="init()">
+        <c:set var="listUser" value="${requestScope.LIST_DTO}"/>
+        <c:if test="${empty listUser}" var="checkList">
             <p class="text-danger">Nothing</p>
         </c:if>
         <c:if test="${!checkList}">
@@ -34,11 +34,10 @@
                             </c:if>
                         </tr>
                     </thead>
-                    <tbody>
                         <c:set var="listUser" value="${requestScope.LIST_DTO}"/>
                         <c:forEach var="dto" items="${listUser}" varStatus="counter">
-                        <form method="POST" action="MainController">
-                            <tr>
+                            <tr id="user-${counter.count}">
+                                <form method="POST" action="MainController">
                                 <th scope="row">${counter.count}</th>
                                 <td>${dto.studentID}</td>
                                 <td>${dto.fullname}</td>
@@ -64,7 +63,7 @@
                                         <button type="submit" name="btnAction" value="ChangeRole" class="btn btn-secondary btn-sm">Change Role</button>
                                     </td>
                                 </c:if>
-                        </form>
+                                </form>
                                 <c:if test="${checkAdmin}">
                                     <td>
                                         <c:url var="changeStatusLink" value="MainController">
@@ -79,7 +78,64 @@
                         </c:forEach>
                     </tbody>
                 </table>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" id="prev-btn">
+                            <a class="page-link" href="#" onclick="goPrev()" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item" id="next-btn">
+                            <a class="page-link" href="#" onclick="goNext()">Next</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </c:if>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script>
+            let size = 5;
+            let pageIndex = 1;
+            let total = parseInt(${listUser.size()});
+            let totalPage = Math.ceil(total / size);
+            if(totalPage === 1){
+                $('#next-btn').addClass("disabled");
+            }
+            function goToPage(page){
+                for(let i = 0; i < ${listUser.size()}; i++){
+                    let index = i + 1;
+                    $("#user-" + index).addClass("d-none")
+                }
+                for(let i = 0; i < size; i++){
+                    let index = (page-1) * size + (i + 1);
+                    $("#user-" + index).removeClass("d-none")
+                }
+            }
+            function  goPrev(){
+                $("#next-btn").removeClass("disabled")
+                console.log("cc")
+                console.log(totalPage)
+                console.log('vcl')
+                goToPage(pageIndex - 1);
+                pageIndex = pageIndex - 1;
+                if(pageIndex === 1){
+                    $("#prev-btn").addClass("disabled")
+                }
+            }
+            function goNext(){
+                $("#prev-btn").removeClass("disabled");
+                console.log(totalPage);
+                goToPage(pageIndex + 1);
+                pageIndex = pageIndex + 1;
+                if(pageIndex === totalPage){
+                    $("#next-btn").addClass("disabled")
+                }
+            }
+
+            function init(){
+                goToPage(1);
+                $("#prev-btn").addClass("disabled")
+            }
+        </script>
 </body>
 </html>

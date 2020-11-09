@@ -30,6 +30,13 @@ public class ChangeRoleServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+
+    //get idTxt (studentID)
+    //get role (roleTxt)
+    //parse role to int
+    //change role
+    //success: url = SUCCESS;
+    //failure: ERROR = ...
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");

@@ -43,8 +43,15 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TblEvent.findByIsInternal", query = "SELECT t FROM TblEvent t WHERE t.isInternal = :isInternal")
     , @NamedQuery(name = "TblEvent.findByNumRegister", query = "SELECT t FROM TblEvent t WHERE t.numRegister = :numRegister")
     , @NamedQuery(name = "TblEvent.findByNumOfAttendees", query = "SELECT t FROM TblEvent t WHERE t.numOfAttendees = :numOfAttendees")
-    , @NamedQuery(name = "TblEvent.findByEventStatus", query = "SELECT t FROM TblEvent t WHERE t.eventStatus = :eventStatus")})
+    , @NamedQuery(name = "TblEvent.findByEventStatus", query = "SELECT t FROM TblEvent t WHERE t.eventStatus = :eventStatus")
+    , @NamedQuery(name = "TblEvent.findByCreatedTime", query = "SELECT t FROM TblEvent t WHERE t.createdTime = :createdTime")})
 public class TblEvent implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventID")
+    private Collection<TblComment> tblCommentCollection;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventID")
+    private Collection<TblEventDetail> tblEventDetailCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -88,12 +95,9 @@ public class TblEvent implements Serializable {
     private int numOfAttendees;
     @Column(name = "eventStatus", length = 20)
     private String eventStatus;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventID")
-    private Collection<TblNotifications> tblNotificationsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventID")
-    private Collection<TblComment> tblCommentCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eventID")
-    private Collection<TblEventDetail> tblEventDetailCollection;
+    @Column(name = "createdTime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdTime;
 
     public TblEvent() {
     }
@@ -220,31 +224,12 @@ public class TblEvent implements Serializable {
         this.eventStatus = eventStatus;
     }
 
-    @XmlTransient
-    public Collection<TblNotifications> getTblNotificationsCollection() {
-        return tblNotificationsCollection;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setTblNotificationsCollection(Collection<TblNotifications> tblNotificationsCollection) {
-        this.tblNotificationsCollection = tblNotificationsCollection;
-    }
-
-    @XmlTransient
-    public Collection<TblComment> getTblCommentCollection() {
-        return tblCommentCollection;
-    }
-
-    public void setTblCommentCollection(Collection<TblComment> tblCommentCollection) {
-        this.tblCommentCollection = tblCommentCollection;
-    }
-
-    @XmlTransient
-    public Collection<TblEventDetail> getTblEventDetailCollection() {
-        return tblEventDetailCollection;
-    }
-
-    public void setTblEventDetailCollection(Collection<TblEventDetail> tblEventDetailCollection) {
-        this.tblEventDetailCollection = tblEventDetailCollection;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     @Override
@@ -270,6 +255,24 @@ public class TblEvent implements Serializable {
     @Override
     public String toString() {
         return "binhtt.entities.TblEvent[ eventID=" + eventID + " ]";
+    }
+
+    @XmlTransient
+    public Collection<TblEventDetail> getTblEventDetailCollection() {
+        return tblEventDetailCollection;
+    }
+
+    public void setTblEventDetailCollection(Collection<TblEventDetail> tblEventDetailCollection) {
+        this.tblEventDetailCollection = tblEventDetailCollection;
+    }
+
+    @XmlTransient
+    public Collection<TblComment> getTblCommentCollection() {
+        return tblCommentCollection;
+    }
+
+    public void setTblCommentCollection(Collection<TblComment> tblCommentCollection) {
+        this.tblCommentCollection = tblCommentCollection;
     }
     
 }

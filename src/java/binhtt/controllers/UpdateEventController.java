@@ -5,11 +5,15 @@
  */
 package binhtt.controllers;
 
+import binhtt.blos.CommentBLO;
 import binhtt.blos.EventBLO;
+import binhtt.blos.NotificationBLO;
 import binhtt.entities.TblEvent;
+import binhtt.entities.TblNotifications;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +51,13 @@ public class UpdateEventController extends HttpServlet {
                 } else {
                     event.setEventStatus("DELETED");
                     boolean check = blo.update(event);
+                    NotificationBLO notificationBLO = new NotificationBLO();
+                    TblNotifications notifications = new TblNotifications();
+                    notifications.setIdNoti("d" + event.getEventID());
+                    notifications.setTimeCreated(new Date());
+                    notifications.setEventID(event);
+                    notifications.setContentNoti(event.getEventName() + " is deleted! So sorry!!!");
+                    notificationBLO.createNotification(notifications);
                     if(check){
                         url = SUCCESS;
                     } else {

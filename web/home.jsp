@@ -13,7 +13,7 @@
         <title>Admin</title>
     </head>
     <body>
-        <jsp:include page="authenticatedheader.jsp"></jsp:include>
+        <jsp:include page="header/authenticatedheader.jsp"></jsp:include>
         <div class="container-fluid">
             <div class="row flex-xl-nowrap">
                 <jsp:include page="utils/navigation.jsp"></jsp:include>

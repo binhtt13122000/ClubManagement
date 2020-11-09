@@ -8,10 +8,9 @@ package binhtt.controllers;
 import binhtt.blos.GroupBLO;
 import binhtt.entities.TblGroup;
 import binhtt.entities.TblUser;
-import binhtt.utils.RoleConstant;
+import binhtt.utils.constant.RoleConstant;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

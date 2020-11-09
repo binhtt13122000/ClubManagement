@@ -1,4 +1,4 @@
-package binhtt.utils;
+package binhtt.utils.constant;
 
 public class RoleConstant {
     public static final int ADMIN = 1;

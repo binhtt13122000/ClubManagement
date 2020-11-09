@@ -5,11 +5,15 @@
  */
 package binhtt.controllers;
 
+import binhtt.blos.CommentBLO;
 import binhtt.blos.EventBLO;
+import binhtt.entities.TblComment;
 import binhtt.entities.TblEvent;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -42,10 +46,13 @@ public class ViewEventController extends HttpServlet {
             } else {
                 EventBLO blo = new EventBLO();
                 TblEvent event = blo.getOneEvent(id);
+                CommentBLO commentBLO = new CommentBLO();
+                HashMap<TblComment, List<TblComment>> comments = commentBLO.getComments(id);
                 if(event == null){
                     request.setAttribute("ERROR", "ID is not be contained in DB!");
                 } else {
                     request.setAttribute("EVENT_DETAIL", event);
+                    request.setAttribute("COMMENT_LIST", comments);
                     url = SUCCESS;
                 }
             }

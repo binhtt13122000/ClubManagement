@@ -7,6 +7,7 @@ package binhtt.controllers;
 
 import binhtt.blos.EventBLO;
 import binhtt.entities.TblEvent;
+import binhtt.entities.TblUser;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,13 +16,16 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author binht
  */
 public class SearchEventController extends HttpServlet {
-
+    private static final String EVENT = "event_manage.jsp";
+    private static final String EVENT_USER = "event_user.jsp";
+    private static final String EVENT_GUEST = "event_guest.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,20 +38,39 @@ public class SearchEventController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String url = null;
         try {
+            HttpSession session = request.getSession();
+            TblUser user = (TblUser) session.getAttribute("user");
             String search = request.getParameter("searchEventTxt");
             EventBLO blo = new EventBLO();
             List<TblEvent> events;
-            if(search.isEmpty()){
-                events = blo.getAll();
+            if(user == null){
+                url = EVENT_GUEST;
+                events = null;
+                if(search.isEmpty()){
+                    events = blo.getAllForGuest();
+                } else {
+                    events = blo.getEventByNameForGuest(search);
+                }
             } else {
-                events = blo.getEventByName(search);
+                if(user.getRoleId().getId() == 3){
+                    url = EVENT_USER;
+                } else {
+                    url = EVENT;
+                }
+                if(search.isEmpty()){
+                    events = blo.getAll();
+                } else {
+                    events = blo.getEventByName(search);
+                }
             }
             request.setAttribute("LIST_EVENT", events);
         } catch (Exception e){
             log("Exception at SearchEventController: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher("event_admin.jsp").forward(request, response);
+
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

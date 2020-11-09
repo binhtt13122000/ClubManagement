@@ -8,12 +8,10 @@ package binhtt.controllers;
 import binhtt.blos.AuthenticationBLO;
 import binhtt.blos.UserBLO;
 import binhtt.entities.TblUser;
-import binhtt.utils.RoleConstant;
+import binhtt.utils.constant.RoleConstant;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,7 +27,7 @@ public class LoginController extends HttpServlet {
 
     private static final String ERROR_PAGE = "index.jsp";
     private static final String HOME = "MainController?btnAction=SearchAccount&searchTxt=";
-    private static final String MEMBER_HOME = "user_home.jsp";
+    private static final String MEMBER_HOME = "MainController?btnAction=SearchNotification";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

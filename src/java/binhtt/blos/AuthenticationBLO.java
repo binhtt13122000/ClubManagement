@@ -34,6 +34,7 @@ public class AuthenticationBLO implements Serializable {
         }
     }
 
+    //check login
     public TblUser checkLogin(String studentID, String password) throws NoResultException {
         TblUser user = null;
         EntityManager em = emf.createEntityManager();
@@ -48,7 +49,8 @@ public class AuthenticationBLO implements Serializable {
         }
         return user;
     }
-    
+
+    //check login google by email
     public TblUser checkLoginByGoogle(String email) throws NoResultException {
         TblUser user = null;
         EntityManager em = emf.createEntityManager();

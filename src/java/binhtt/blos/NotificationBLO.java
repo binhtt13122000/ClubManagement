@@ -8,6 +8,7 @@ package binhtt.blos;
 import binhtt.entities.TblNotifications;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,11 +39,12 @@ public class NotificationBLO implements Serializable {
         }
     }
 
+    //get all notification
     public List<TblNotifications> getAll() throws Exception{
         EntityManager em = emf.createEntityManager();
         List<TblNotifications> notifications;
         try {
-            TypedQuery<TblNotifications> query = em.createNamedQuery("TblNotifications.findAll", TblNotifications.class);
+            TypedQuery<TblNotifications> query = em.createQuery("SELECT t FROM TblNotifications t ORDER BY t.timeCreated desc", TblNotifications.class);
             notifications = query.getResultList();
         } finally {
             em.close();
@@ -50,6 +52,7 @@ public class NotificationBLO implements Serializable {
         return notifications;
     }
 
+    //create notification
     public boolean createNotification(TblNotifications notification) throws Exception{
         EntityManager em = emf.createEntityManager();
         boolean check = false;

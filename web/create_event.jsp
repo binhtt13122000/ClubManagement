@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: binht
@@ -11,7 +12,7 @@
     <title>Create Event</title>
 </head>
 <body>
-<jsp:include page="authenticatedheader.jsp"></jsp:include>
+<jsp:include page="header/authenticatedheader.jsp"></jsp:include>
 <div class="container-fluid">
     <div class="row flex-xl-nowrap">
         <jsp:include page="utils/navigation.jsp"></jsp:include>
@@ -29,7 +30,7 @@
                 </div>
                 <div class="form-group">
                     <label for="banner">Banner</label>
-                    <input type="file" required class="form-control" name="bannerTxt" value="${param.bannerTxt}" id="banner" aria-describedby="banner">
+                    <input type="file" accept="image/*" required class="form-control" name="bannerTxt" value="${param.bannerTxt}" id="banner" aria-describedby="banner">
                     <p id="bannerErr" style="color: white"></p>
                 </div>
                 <div class="form-group">
@@ -39,7 +40,7 @@
                 </div>
                 <div class="form-group">
                     <label for="total">Total</label>
-                    <input type="number" required max="200"  class="form-control" id="total" name="totalTxt" value="${param.totalTxt}" aria-describedby="total">
+                    <input type="number" required max="200" min="5"  class="form-control" id="total" name="totalTxt" value="${param.totalTxt}" aria-describedby="total">
                     <p id="totalErr" style="color: white"></p>
                 </div>
                 <div class="form-group">
@@ -67,39 +68,39 @@
     </div>
 </div>
 <script>
-    $(document).ready(function (){
-        $('#create-event-form').submit(function (e){
-            let count = 0;
-            let timeCloseRegister = new Date($("#timeCloseRegister").val());
-            let timeStartEvent = new Date($('#timeStartEvent').val());
-            let timeEndEvent = new Date($('#timeEndEvent').val());
-            let date = new Date();
-            if(timeCloseRegister - date < 3 * 24 * 60 * 60 * 1000){
-                count++;
-                $("#timeCloseRegisterErr").text("Close Register must be at least 3 days from now!");
-                $('#timeCloseRegisterErr').addClass("text-danger")
-            } else {
-                $("#timeCloseRegisterErr").removeClass("text-danger")
-            }
-            if(timeStartEvent - timeCloseRegister < 3600 * 2 * 24 * 1000){
-                count++;
-                $("#timeStartEventErr").text("Date Start Event must be at least 3 days from now!");
-                $('#timeStartEventErr').addClass("text-danger")
-            } else {
-                $("#timeStartEventErr").removeClass("text-danger")
-            }
-            if(timeEndEvent - timeStartEvent < 3600 * 1000){
-                count++;
-                $("#timeEndEventErr").text("End Event must be after Start event at least 1 hours");
-                $('#timeEndEventErr').addClass("text-danger")
-            } else {
-                $("#timeEndEventErr").removeClass("text-danger")
-            }
-            if(count > 0){
-                e.preventDefault();
-            }
-        })
-    })
+//    $(document).ready(function (){
+//        $('#create-event-form').submit(function (e){
+//            let count = 0;
+//            let timeCloseRegister = new Date($("#timeCloseRegister").val());
+//            let timeStartEvent = new Date($('#timeStartEvent').val());
+//            let timeEndEvent = new Date($('#timeEndEvent').val());
+//            let date = new Date();
+//            if(timeCloseRegister - date < 3 * 24 * 60 * 60 * 1000){
+//                count++;
+//                $("#timeCloseRegisterErr").text("Close Register must be at least 3 days from now!");
+//                $('#timeCloseRegisterErr').addClass("text-danger")
+//            } else {
+//                $("#timeCloseRegisterErr").removeClass("text-danger")
+//            }
+//            if(timeStartEvent - timeCloseRegister < 3600 * 2 * 24 * 1000){
+//                count++;
+//                $("#timeStartEventErr").text("Date Start Event must be at least 3 days from now!");
+//                $('#timeStartEventErr').addClass("text-danger")
+//            } else {
+//                $("#timeStartEventErr").removeClass("text-danger")
+//            }
+//            if(timeEndEvent - timeStartEvent < 3600 * 1000){
+//                count++;
+//                $("#timeEndEventErr").text("End Event must be after Start event at least 1 hours");
+//                $('#timeEndEventErr').addClass("text-danger")
+//            } else {
+//                $("#timeEndEventErr").removeClass("text-danger")
+//            }
+//            if(count > 0){
+//                e.preventDefault();
+//            }
+//        })
+//    })
 </script>
 </body>
 </html>

@@ -7,9 +7,12 @@ package binhtt.entities;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,6 +20,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -33,14 +38,16 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "TblComment.findByStudentID", query = "SELECT t FROM TblComment t WHERE t.studentID = :studentID")
     , @NamedQuery(name = "TblComment.findByFullname", query = "SELECT t FROM TblComment t WHERE t.fullname = :fullname")
     , @NamedQuery(name = "TblComment.findByEmail", query = "SELECT t FROM TblComment t WHERE t.email = :email")
-    , @NamedQuery(name = "TblComment.findByContent", query = "SELECT t FROM TblComment t WHERE t.content = :content")})
+    , @NamedQuery(name = "TblComment.findByContent", query = "SELECT t FROM TblComment t WHERE t.content = :content")
+    , @NamedQuery(name = "TblComment.findByCreatedTime", query = "SELECT t FROM TblComment t WHERE t.createdTime = :createdTime")})
 public class TblComment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id", nullable = false, length = 20)
-    private String id;
+    @Column(name = "id", nullable = false)
+    private Integer id;
     @Column(name = "studentID", length = 8)
     private String studentID;
     @Column(name = "fullname", length = 30)
@@ -50,6 +57,10 @@ public class TblComment implements Serializable {
     private String email;
     @Column(name = "content", length = 100)
     private String content;
+    @Basic(optional = false)
+    @Column(name = "createdTime", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdTime;
     @OneToMany(mappedBy = "parentID")
     private Collection<TblComment> tblCommentCollection;
     @JoinColumn(name = "parentID", referencedColumnName = "id")
@@ -65,20 +76,21 @@ public class TblComment implements Serializable {
     public TblComment() {
     }
 
-    public TblComment(String id) {
+    public TblComment(Integer id) {
         this.id = id;
     }
 
-    public TblComment(String id, String email) {
+    public TblComment(Integer id, String email, Date createdTime) {
         this.id = id;
         this.email = email;
+        this.createdTime = createdTime;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -112,6 +124,14 @@ public class TblComment implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     @XmlTransient
